@@ -1,14 +1,22 @@
 import sys
 
-from PyQt6.QtCore import *
+from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
+from PyQt6.QtCore import *
 class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Aquifer Test")
         layout = QGridLayout()
 
+        # Main Page Heading
         self.page_1_heading = QLabel("<h1>Hydraulic Properties</h1>",self)
+        self.page_1_heading.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.page_1_heading.setStyleSheet("""
+            QWidget {
+                color:red;
+            }
+        """)
         layout.addWidget(self.page_1_heading, 0, 0, 1, 5)
 
         self.aqfr_hydr_cond = QLabel("<h3>Aquifer Hydraulic Conductivity</h3>")
