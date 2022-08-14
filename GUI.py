@@ -1,9 +1,11 @@
 from cProfile import label
 import sys
 
-from PyQt6.QtGui import *
-from PyQt6.QtWidgets import *
+import csv
 from PyQt6.QtCore import *
+from PyQt6.QtWidgets import *
+from PyQt6.QtGui import *
+
 class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
@@ -142,13 +144,92 @@ class Screen2(QWidget):
     def lastpage(self):
         widget.setCurrentIndex(widget.currentIndex() - 1)  
 
+
+class Screen3(QWidget):
+    def __init__(self, fileName, parent = None):
+        super(Screen3, self).__init__(parent)
+        self.setWindowTitle("Aquifer Test")
+        
+
+        self.page_1_heading = QLabel("<h1> Screen 3 </h1>",self)
+
+        wellRadiusLayout = QHBoxLayout()
+        self.well_radius = QLabel("<h3> Well Radius </h3>")
+        wellRadiusLayout.addWidget(self.well_radius)
+        self.well_radius_input = QLineEdit(self)
+        wellRadiusLayout.addWidget(self.well_radius_input)
+
+        pumpingRateLayout = QHBoxLayout()
+        self.pumping_rate = QLabel("<h3> Pumping Rate </h3>")
+        pumpingRateLayout.addWidget(self.pumping_rate)
+        self.pumping_rate_input = QLineEdit(self)
+        pumpingRateLayout.addWidget(self.pumping_rate_input)
+
+        self.fileName = fileName
+        self.model = QStandardItemModel(self)
+
+        self.tableView = QTableView(self)
+        self.tableView.setModel(self.model)
+        self.tableView.horizontalHeader().setStretchLastSection(True)
+
+        self.pushButtonLoad = QPushButton(self)
+        self.pushButtonLoad.setText("Load Csv File!")
+        self.pushButtonLoad.clicked.connect(self.on_pushButtonLoad_clicked)
+
+        self.pushButtonWrite = QPushButton(self)
+        self.pushButtonWrite.setText("Write Csv File!")
+        self.pushButtonWrite.clicked.connect(self.on_pushButtonWrite_clicked)
+
+        self.layoutVertical = QVBoxLayout(self)
+        self.layoutVertical.addWidget(self.page_1_heading)
+        self.layoutVertical.addLayout(wellRadiusLayout)
+        self.layoutVertical.addLayout(pumpingRateLayout)
+        self.layoutVertical.addWidget(self.tableView)
+        self.layoutVertical.addWidget(self.pushButtonLoad)
+        self.layoutVertical.addWidget(self.pushButtonWrite)
+        
+
+    def loadCsv(self, fileName):
+        with open(fileName, "r") as fileInput:
+            for row in csv.reader(fileInput):    
+                items = [
+                    QStandardItem(field)
+                    for field in row
+                ]
+                self.model.appendRow(items)
+
+    def writeCsv(self, fileName):
+        with open(fileName, "w") as fileOutput:
+            writer = csv.writer(fileOutput)
+            for rowNumber in range(self.model.rowCount()):
+                fields = [
+                    self.model.data(
+                        self.model.index(rowNumber, columnNumber),
+                        Qt.ItemDataRole.DisplayRole
+                    )
+                    for columnNumber in range(self.model.columnCount())
+                ]
+                writer.writerow(fields)
+
+    @pyqtSlot()
+    def on_pushButtonWrite_clicked(self):
+        self.writeCsv(self.fileName)
+
+    @pyqtSlot()
+    def on_pushButtonLoad_clicked(self):
+        self.loadCsv(self.fileName)
+
+
 app = QApplication(sys.argv)
 
 window = MainWindow()
 screen2 = Screen2()
+screen3 = Screen3("data.csv")
 
 widget = QStackedWidget()
 widget.addWidget(window)
 widget.addWidget(screen2)
+widget.addWidget(screen3)
 widget.show()
 app.exec()
+
