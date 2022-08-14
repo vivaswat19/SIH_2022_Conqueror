@@ -1,3 +1,4 @@
+from cProfile import label
 import sys
 
 from PyQt6.QtGui import *
@@ -6,59 +7,83 @@ from PyQt6.QtCore import *
 class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Aquifer Test")
         layout = QGridLayout()
+        label_stylesheet = """
+            QWidget {
+                font: italic 20px;
+                padding-left: 0px;
+                padding-right: 5px;
+                padding-bottom: 10px;
+            }
+        """
+
+        self.setWindowTitle("Aquifer Test")
 
         # Main Page Heading
-        self.page_1_heading = QLabel("<h1>Hydraulic Properties</h1>",self)
+        self.page_1_heading = QLabel("Hydraulic Properties",self)
         self.page_1_heading.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.page_1_heading.setStyleSheet("""
             QWidget {
-                color:red;
+                color: red;
+                font: bold 30px;
+                padding: 20px;
             }
         """)
         layout.addWidget(self.page_1_heading, 0, 0, 1, 5)
 
-        self.aqfr_hydr_cond = QLabel("<h3>Aquifer Hydraulic Conductivity</h3>")
+        # Aquifer Hydraulic Conductivity Widget
+        self.aqfr_hydr_cond = QLabel("Aquifer Hydraulic Conductivity")
         self.aqfr_hydr_cond_input = QLineEdit(self)
+        self.aqfr_hydr_cond.setStyleSheet(label_stylesheet)
+
         layout.addWidget(self.aqfr_hydr_cond, 1, 0, 1, 3)
         layout.addWidget(self.aqfr_hydr_cond_input, 1,3,1,2)
 
-        self.aqfr_spec_storage = QLabel("<h3>Aquifer Specific Storage</h3>")
+        self.aqfr_spec_storage = QLabel("Aquifer Specific Storage")
         self.aqfr_spec_storage_input = QLineEdit(self)
+        self.aqfr_spec_storage.setStyleSheet(label_stylesheet)
         layout.addWidget(self.aqfr_spec_storage, 2, 0, 1, 3)
         layout.addWidget(self.aqfr_spec_storage_input, 2, 3, 1, 2)
         
-        self.aqfr_spec_yield = QLabel("<h3>Aquifer Specific Yield</h3>")
+        self.aqfr_spec_yield = QLabel("Aquifer Specific Yield")
         self.aqfr_spec_yield_input = QLineEdit(self)
+        self.aqfr_spec_yield.setStyleSheet(label_stylesheet)
         layout.addWidget(self.aqfr_spec_yield, 3, 0, 1, 3)
         layout.addWidget(self.aqfr_spec_yield_input, 3, 3, 1, 2)
         
-        self.aqfr_thickness = QLabel("<h3>Aquifer Thickness</h3>")
+        self.aqfr_thickness = QLabel("Aquifer Thickness")
         self.aqfr_thickness_input = QLineEdit(self)
+        self.aqfr_thickness.setStyleSheet(label_stylesheet)
         layout.addWidget(self.aqfr_thickness, 4, 0, 1, 3)
         layout.addWidget(self.aqfr_thickness_input, 4, 3, 1, 2)
         
-        self.aqfrd_thickness = QLabel("<h3>Aquitard Thickness</h3>")
+        self.aqfrd_thickness = QLabel("Aquitard Thickness")
         self.aqfrd_thickness_input = QLineEdit(self)
+        self.aqfrd_thickness.setStyleSheet(label_stylesheet)
         layout.addWidget(self.aqfrd_thickness, 5, 0, 1, 3)
         layout.addWidget(self.aqfrd_thickness_input, 5, 3, 1, 2)
         
-        self.aqfrd_vert_cond= QLabel("<h3>Aquitard Vertical conductivity</h3>")
+        self.aqfrd_vert_cond= QLabel("Aquitard Vertical conductivity")
         self.aqfrd_vert_cond_input= QLineEdit(self)
+        self.aqfrd_vert_cond.setStyleSheet(label_stylesheet)
         layout.addWidget(self.aqfrd_vert_cond, 6, 0, 1, 3)
         layout.addWidget(self.aqfrd_vert_cond_input, 6, 3, 1, 2)
         
-        self.aqfrd_spec_storage = QLabel("<h3>Aquitard Specific storage</h3>")
+        self.aqfrd_spec_storage = QLabel("Aquitard Specific storage")
         self.aqfrd_spec_storage_input = QLineEdit(self)
+        self.aqfrd_spec_storage.setStyleSheet(label_stylesheet)
         layout.addWidget(self.aqfrd_spec_storage, 7, 0, 1, 3)
         layout.addWidget(self.aqfrd_spec_storage_input, 7, 3, 1, 2)
 
         self.update_btn = QPushButton(text="Update", parent=self)
+        self.update_btn.setStyleSheet("""
+        """)
         layout.addWidget(self.update_btn, 8, 0, 1, 2)
 
         self.save_btn = QPushButton(text="Save", parent=self)
-        self.save_btn.clicked.connect(self.next)   
+        self.save_btn.clicked.connect(self.next)
+        self.save_btn.setStyleSheet("""
+        """)   
         layout.addWidget(self.save_btn, 8, 3, 1, 2)
 
         self.setLayout(layout)
