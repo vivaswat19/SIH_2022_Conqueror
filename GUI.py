@@ -26,7 +26,7 @@ class MainWindow(QWidget):
         self.page_1_heading.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.page_1_heading.setStyleSheet("""
             QWidget {
-                color: red;
+                color: white;
                 font: bold 30px;
                 padding: 20px;
             }
@@ -162,9 +162,6 @@ class Screen2(QWidget):
         self.checkBox_t6.setStyleSheet(label_stylesheet)
         layout.addWidget(self.checkBox_t6, 8, 0, 2, 5)
 
-        self.setLayout(layout)
-
-        
 
         self.last = QPushButton(text="last page", parent=self)
         self.last.clicked.connect(self.lastpage)
@@ -177,6 +174,8 @@ class Screen2(QWidget):
         self.next.setStyleSheet("""
         """)   
         layout.addWidget(self.next, 10, 3, 2, 2)
+
+        self.setLayout(layout)
 
     def checkedc(self,checked):
         self.langs['c'] = checked
@@ -193,7 +192,7 @@ class Screen3(QWidget):
         
 
         self.page_1_heading = QLabel("<h1> Screen 3 </h1>",self)
-
+        self.page_1_heading.setAlignment(Qt.AlignmentFlag.AlignCenter)
         wellRadiusLayout = QHBoxLayout()
         self.well_radius = QLabel("<h3> Well Radius </h3>")
         wellRadiusLayout.addWidget(self.well_radius)
