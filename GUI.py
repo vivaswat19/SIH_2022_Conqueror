@@ -74,32 +74,69 @@ class Screen2(QWidget):
 
         layout = QGridLayout()
         self.page_1_heading = QLabel("<h1>Select Testing Model</h1>",self)
-        layout.addWidget(self.page_1_heading, 0, 0, 0, 20)
+        layout.addWidget(self.page_1_heading, 0, 0, 1, 20)
 
         
         self.checkBox_t1 = QCheckBox(self)
         self.checkBox_t1.stateChanged.connect(self.checkedc)
-        self.checkBox_t1.setText("T1")
+        self.checkBox_t1.setText("Confined (Thesis)")
+        self.checkBox_t1.setStyleSheet("""
+            QWidget {
+                font-size: 19px;
+            }
+        """)
 
-        layout.addWidget(self.checkBox_t1, 1, 1, 1, 1)
+        layout.addWidget(self.checkBox_t1, 1, 1, 1, 5)
         
         self.checkBox_t2 = QCheckBox(self)
         self.checkBox_t2.stateChanged.connect(self.checkedc)
-        self.checkBox_t2.setText("T1")
-
-        layout.addWidget(self.checkBox_t2, 2, 1, 1, 1)
+        self.checkBox_t2.setText("Confined (Thesis)")
+        self.checkBox_t2.setStyleSheet("""
+            QWidget {
+                font-size: 19px;
+            }
+        """)
+        layout.addWidget(self.checkBox_t2, 2, 1, 1, 5)
         
         self.checkBox_t3 = QCheckBox(self)
         self.checkBox_t3.stateChanged.connect(self.checkedc)
-        self.checkBox_t3.setText("T1")
-
-        layout.addWidget(self.checkBox_t3, 3, 1, 1, 1)
+        self.checkBox_t3.setText("Confined (Thesis)")
+        self.checkBox_t3.setStyleSheet("""
+            QWidget {
+                font-size: 19px;
+            }
+        """)
+        layout.addWidget(self.checkBox_t3, 3, 1, 1, 5)
         
         self.checkBox_t4 = QCheckBox(self)
         self.checkBox_t4.stateChanged.connect(self.checkedc)
-        self.checkBox_t4.setText("T1")
-
-        layout.addWidget(self.checkBox_t4, 4, 1, 1, 1)
+        self.checkBox_t4.setText("Confined (Thesis)")
+        self.checkBox_t4.setStyleSheet("""
+            QWidget {
+                font-size: 19px;
+            }
+        """)
+        layout.addWidget(self.checkBox_t4, 4, 1, 1, 5)
+        
+        self.checkBox_t5 = QCheckBox(self)
+        self.checkBox_t5.stateChanged.connect(self.checkedc)
+        self.checkBox_t5.setText("Confined (Thesis)")
+        self.checkBox_t5.setStyleSheet("""
+            QWidget {
+                font-size: 19px;
+            }
+        """)
+        layout.addWidget(self.checkBox_t5, 5, 1, 1, 5)
+        
+        self.checkBox_t6 = QCheckBox(self)
+        self.checkBox_t6.stateChanged.connect(self.checkedc)
+        self.checkBox_t6.setText("Confined (Thesis)")
+        self.checkBox_t6.setStyleSheet("""
+            QWidget {
+                font-size: 19px;
+            }
+        """)
+        layout.addWidget(self.checkBox_t6, 6, 1, 1, 5)
 
         self.setLayout(layout)
 
