@@ -98,79 +98,83 @@ class Screen2(QWidget):
         self.setWindowTitle("Pumping test Model")
 
         layout = QGridLayout()
-        self.page_1_heading = QLabel("<h1>Select Testing Model</h1>",self)
-        layout.addWidget(self.page_1_heading, 0, 0, 1, 20)
+
+        
+        label_stylesheet = """
+            QWidget {
+                font: italic 20px;
+                padding-left: 0px;
+                padding-right: 5px;
+                padding-bottom: 10px;
+            }
+        """
+
+        
+        # Main Page Heading
+        self.page_1_heading = QLabel("Select Testing Model",self)
+        self.page_1_heading.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.page_1_heading.setStyleSheet("""
+            QWidget {
+                color: red;
+                font: bold 30px;
+                padding: 20px;
+            }
+        """)
+        layout.addWidget(self.page_1_heading, 0, 0, 3, 5)
 
         
         self.checkBox_t1 = QCheckBox(self)
         self.checkBox_t1.stateChanged.connect(self.checkedc)
         self.checkBox_t1.setText("Confined (Thesis)")
-        self.checkBox_t1.setStyleSheet("""
-            QWidget {
-                font-size: 19px;
-            }
-        """)
+        self.checkBox_t1.setStyleSheet(label_stylesheet)
 
-        layout.addWidget(self.checkBox_t1, 1, 1, 1, 5)
+        layout.addWidget(self.checkBox_t1, 3, 0, 2, 5)
         
         self.checkBox_t2 = QCheckBox(self)
         self.checkBox_t2.stateChanged.connect(self.checkedc)
         self.checkBox_t2.setText("Confined (Thesis)")
-        self.checkBox_t2.setStyleSheet("""
-            QWidget {
-                font-size: 19px;
-            }
-        """)
-        layout.addWidget(self.checkBox_t2, 2, 1, 1, 5)
+        self.checkBox_t2.setStyleSheet(label_stylesheet)
+        layout.addWidget(self.checkBox_t2, 4, 0, 2, 5)
         
         self.checkBox_t3 = QCheckBox(self)
         self.checkBox_t3.stateChanged.connect(self.checkedc)
         self.checkBox_t3.setText("Confined (Thesis)")
-        self.checkBox_t3.setStyleSheet("""
-            QWidget {
-                font-size: 19px;
-            }
-        """)
-        layout.addWidget(self.checkBox_t3, 3, 1, 1, 5)
+        self.checkBox_t3.setStyleSheet(label_stylesheet)
+        layout.addWidget(self.checkBox_t3, 5, 0, 2, 5)
         
         self.checkBox_t4 = QCheckBox(self)
         self.checkBox_t4.stateChanged.connect(self.checkedc)
         self.checkBox_t4.setText("Confined (Thesis)")
-        self.checkBox_t4.setStyleSheet("""
-            QWidget {
-                font-size: 19px;
-            }
-        """)
-        layout.addWidget(self.checkBox_t4, 4, 1, 1, 5)
+        self.checkBox_t4.setStyleSheet(label_stylesheet)
+        layout.addWidget(self.checkBox_t4, 6, 0, 2, 5)
         
         self.checkBox_t5 = QCheckBox(self)
         self.checkBox_t5.stateChanged.connect(self.checkedc)
         self.checkBox_t5.setText("Confined (Thesis)")
-        self.checkBox_t5.setStyleSheet("""
-            QWidget {
-                font-size: 19px;
-            }
-        """)
-        layout.addWidget(self.checkBox_t5, 5, 1, 1, 5)
+        self.checkBox_t5.setStyleSheet(label_stylesheet)
+        layout.addWidget(self.checkBox_t5, 7, 0, 2, 5)
         
         self.checkBox_t6 = QCheckBox(self)
         self.checkBox_t6.stateChanged.connect(self.checkedc)
         self.checkBox_t6.setText("Confined (Thesis)")
-        self.checkBox_t6.setStyleSheet("""
-            QWidget {
-                font-size: 19px;
-            }
-        """)
-        layout.addWidget(self.checkBox_t6, 6, 1, 1, 5)
+        self.checkBox_t6.setStyleSheet(label_stylesheet)
+        layout.addWidget(self.checkBox_t6, 8, 0, 2, 5)
 
         self.setLayout(layout)
 
-
-        # self.next = QPushButton(text="Next Page", parent=self)
-        # self.next.clicked.connect(self.nextpage)  
         
-        # self.last = QPushButton(text="Last Page", parent=self)
-        # self.last.clicked.connect(self.lastpage)        
+
+        self.last = QPushButton(text="last page", parent=self)
+        self.last.clicked.connect(self.lastpage)
+        self.last.setStyleSheet("""
+        """)
+        layout.addWidget(self.last, 10, 0, 2, 2)
+
+        self.next = QPushButton(text="next page", parent=self)
+        self.next.clicked.connect(self.nextpage)
+        self.next.setStyleSheet("""
+        """)   
+        layout.addWidget(self.next, 10, 3, 2, 2)
 
     def checkedc(self,checked):
         self.langs['c'] = checked
