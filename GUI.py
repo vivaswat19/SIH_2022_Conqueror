@@ -1,4 +1,5 @@
 from cProfile import label
+from msilib.schema import CheckBox
 import sys
 
 import csv
@@ -126,45 +127,37 @@ class Screen2(QWidget):
 
         
         self.checkBox_t1 = QCheckBox(self)
-        self.checkBox_t1.stateChanged.connect(self.checkedc)
         self.checkBox_t1.setText("Confined (Thesis)")
         self.checkBox_t1.setStyleSheet(label_stylesheet)
 
         layout.addWidget(self.checkBox_t1, 3, 0, 2, 5)
         
         self.checkBox_t2 = QCheckBox(self)
-        self.checkBox_t2.stateChanged.connect(self.checkedc)
         self.checkBox_t2.setText("Confined (Wellborn storage; numerical)")
         self.checkBox_t2.setStyleSheet(label_stylesheet)
         layout.addWidget(self.checkBox_t2, 4, 0, 2, 5)
         
         self.checkBox_t3 = QCheckBox(self)
-        self.checkBox_t3.stateChanged.connect(self.checkedc)
         self.checkBox_t3.setText("Leaky (Hantush and Jacob)")
         self.checkBox_t3.setStyleSheet(label_stylesheet)
         layout.addWidget(self.checkBox_t3, 5, 0, 2, 5)
         
         self.checkBox_t4 = QCheckBox(self)
-        self.checkBox_t4.stateChanged.connect(self.checkedc)
         self.checkBox_t4.setText("Leaky (Hantush, 1960; short-term; aquitard storage)")
         self.checkBox_t4.setStyleSheet(label_stylesheet)
         layout.addWidget(self.checkBox_t4, 6, 0, 2, 5)
         
         self.checkBox_t5 = QCheckBox(self)
-        self.checkBox_t5.stateChanged.connect(self.checkedc)
         self.checkBox_t5.setText("Unconfined (Thesis, using Sy)")
         self.checkBox_t5.setStyleSheet(label_stylesheet)
         layout.addWidget(self.checkBox_t5, 7, 0, 2, 5)
         
         self.checkBox_t6 = QCheckBox(self)
-        self.checkBox_t6.stateChanged.connect(self.checkedc)
         self.checkBox_t6.setText("Unconfined (Dupuit; wellborn storage; numerical)")
         self.checkBox_t6.setStyleSheet(label_stylesheet)
         layout.addWidget(self.checkBox_t6, 8, 0, 2, 5)
 
         self.setLayout(layout)
-
-        
 
         self.last = QPushButton(text="last page", parent=self)
         self.last.clicked.connect(self.lastpage)
@@ -178,9 +171,13 @@ class Screen2(QWidget):
         """)   
         layout.addWidget(self.next, 11, 3, 2, 2)
 
-    def checkedc(self,checked):
-        self.langs['c'] = checked
     def nextpage(self):
+        self.langs["T1"] = self.checkBox_t1.isChecked()
+        self.langs["T2"] = self.checkBox_t2.isChecked()
+        self.langs["T3"] = self.checkBox_t3.isChecked()
+        self.langs["T4"] = self.checkBox_t4.isChecked()
+        self.langs["T5"] = self.checkBox_t5.isChecked()
+        self.langs["T6"] = self.checkBox_t6.isChecked()
         widget.setCurrentIndex(widget.currentIndex() + 1)  
     def lastpage(self):
         widget.setCurrentIndex(widget.currentIndex() - 1)  
