@@ -197,14 +197,14 @@ class Screen2(QWidget):
 
         button_row_layout = QHBoxLayout()
 
-        self.last = QPushButton(text="last page", parent=self)
+        self.last = QPushButton(text="Previous Page", parent=self)
         self.last.clicked.connect(self.lastpage)
         self.last.setStyleSheet("""
         """)
 
         button_row_layout.addWidget(self.last)
 
-        self.next = QPushButton(text="next page", parent=self)
+        self.next = QPushButton(text="Save", parent=self)
         self.next.clicked.connect(self.nextpage)
         self.next.setStyleSheet("""
         """)   
