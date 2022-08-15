@@ -9,9 +9,6 @@ from PyQt6.QtGui import *
 class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
-        # self.setStyleSheet("""
-        #     background-color: black;
-        # """)
         layout = QGridLayout()
         label_stylesheet = """
             QWidget {
