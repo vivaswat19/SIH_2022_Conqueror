@@ -6,7 +6,7 @@ from PyQt6.QtCore import *
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
 
-class MainWindow(QWidget):
+class Page_1(QWidget):
     def __init__(self):
         super().__init__()
         # self.setStyleSheet("""
@@ -266,12 +266,12 @@ class Screen3(QWidget):
 
 app = QApplication(sys.argv)
 
-window = MainWindow()
+page_1 = Page_1()
 screen2 = Screen2()
 screen3 = Screen3("data.csv")
 
 widget = QStackedWidget()
-widget.addWidget(window)
+widget.addWidget(page_1)
 widget.addWidget(screen2)
 widget.addWidget(screen3)
 widget.show()
