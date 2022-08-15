@@ -184,14 +184,21 @@ class Screen2(QWidget):
         self.setWindowTitle("Pumping test Model")
 
         layout = QVBoxLayout(self)
-
         
         label_stylesheet = """
             QWidget {
-                font: italic 20px;
+                font: 20px;
+                font-weight: 400;
                 padding-left: 0px;
                 padding-right: 5px;
                 padding-bottom: 10px;
+            }
+        """
+        button_stylesheet = """
+            QPushButton {
+                font: bold 20px;
+                min-width: 225;
+                max-width: 250;
             }
         """
 
@@ -201,7 +208,7 @@ class Screen2(QWidget):
         self.page_1_heading.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.page_1_heading.setStyleSheet("""
             QWidget {
-                font: bold 30px;
+                font: bold 40px;
                 padding: 20px;
                 max-height: 50px;
             }
@@ -258,8 +265,7 @@ class Screen2(QWidget):
 
         self.last = QPushButton(text="Previous Page", parent=self)
         self.last.clicked.connect(self.lastpage)
-        self.last.setStyleSheet("""
-        """)
+        self.last.setStyleSheet(button_stylesheet)
 
         button_row_layout.addWidget(self.last)
 
@@ -267,6 +273,7 @@ class Screen2(QWidget):
         self.next.clicked.connect(self.nextpage)
         self.next.setStyleSheet("""
         """)   
+        self.next.setStyleSheet(button_stylesheet)
         
         button_row_layout.addWidget(self.next)
         layout.addLayout(button_row_layout)
