@@ -9,6 +9,9 @@ from PyQt6.QtGui import *
 class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
+        # self.setStyleSheet("""
+        #     background-color: black;
+        # """)
         layout = QGridLayout()
         label_stylesheet = """
             QWidget {
@@ -134,31 +137,31 @@ class Screen2(QWidget):
         
         self.checkBox_t2 = QCheckBox(self)
         self.checkBox_t2.stateChanged.connect(self.checkedc)
-        self.checkBox_t2.setText("Confined (Thesis)")
+        self.checkBox_t2.setText("Confined (Wellborn storage; numerical)")
         self.checkBox_t2.setStyleSheet(label_stylesheet)
         layout.addWidget(self.checkBox_t2, 4, 0, 2, 5)
         
         self.checkBox_t3 = QCheckBox(self)
         self.checkBox_t3.stateChanged.connect(self.checkedc)
-        self.checkBox_t3.setText("Confined (Thesis)")
+        self.checkBox_t3.setText("Leaky (Hantush and Jacob)")
         self.checkBox_t3.setStyleSheet(label_stylesheet)
         layout.addWidget(self.checkBox_t3, 5, 0, 2, 5)
         
         self.checkBox_t4 = QCheckBox(self)
         self.checkBox_t4.stateChanged.connect(self.checkedc)
-        self.checkBox_t4.setText("Confined (Thesis)")
+        self.checkBox_t4.setText("Leaky (Hantush, 1960; short-term; aquitard storage)")
         self.checkBox_t4.setStyleSheet(label_stylesheet)
         layout.addWidget(self.checkBox_t4, 6, 0, 2, 5)
         
         self.checkBox_t5 = QCheckBox(self)
         self.checkBox_t5.stateChanged.connect(self.checkedc)
-        self.checkBox_t5.setText("Confined (Thesis)")
+        self.checkBox_t5.setText("Unconfined (Thesis, using Sy)")
         self.checkBox_t5.setStyleSheet(label_stylesheet)
         layout.addWidget(self.checkBox_t5, 7, 0, 2, 5)
         
         self.checkBox_t6 = QCheckBox(self)
         self.checkBox_t6.stateChanged.connect(self.checkedc)
-        self.checkBox_t6.setText("Confined (Thesis)")
+        self.checkBox_t6.setText("Unconfined (Dupuit; wellborn storage; numerical)")
         self.checkBox_t6.setStyleSheet(label_stylesheet)
         layout.addWidget(self.checkBox_t6, 8, 0, 2, 5)
 
@@ -170,13 +173,13 @@ class Screen2(QWidget):
         self.last.clicked.connect(self.lastpage)
         self.last.setStyleSheet("""
         """)
-        layout.addWidget(self.last, 10, 0, 2, 2)
+        layout.addWidget(self.last, 11, 0, 2, 2)
 
         self.next = QPushButton(text="next page", parent=self)
         self.next.clicked.connect(self.nextpage)
         self.next.setStyleSheet("""
         """)   
-        layout.addWidget(self.next, 10, 3, 2, 2)
+        layout.addWidget(self.next, 11, 3, 2, 2)
 
     def checkedc(self,checked):
         self.langs['c'] = checked
