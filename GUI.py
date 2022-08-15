@@ -1,4 +1,4 @@
-from cProfile import label
+from ssl import SSL_ERROR_EOF
 import sys
 
 import csv
@@ -6,10 +6,14 @@ from PyQt6.QtCore import *
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
 
-class Page_1(QWidget):
+class Screen1(QWidget):
     def __init__(self):
         super().__init__()
-        layout = QGridLayout()
+        # self.setStyleSheet("""
+        #     background-color: white;
+        # """)
+
+        layout = QVBoxLayout(self)
         label_stylesheet = """
             QWidget {
                 font: italic 20px;
@@ -26,67 +30,92 @@ class Page_1(QWidget):
         self.page_1_heading.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.page_1_heading.setStyleSheet("""
             QWidget {
-                color: red;
                 font: bold 30px;
                 padding: 20px;
+                max-height: 50px;
             }
         """)
-        layout.addWidget(self.page_1_heading, 0, 0, 1, 5)
+        layout.addWidget(self.page_1_heading)
 
         # Aquifer Hydraulic Conductivity Widget
         self.aqfr_hydr_cond = QLabel("Aquifer Hydraulic Conductivity")
         self.aqfr_hydr_cond_input = QLineEdit(self)
+        self.aqfr_hydr_cond_input.setPlaceholderText("0")
         self.aqfr_hydr_cond.setStyleSheet(label_stylesheet)
 
-        layout.addWidget(self.aqfr_hydr_cond, 1, 0, 1, 3)
-        layout.addWidget(self.aqfr_hydr_cond_input, 1,3,1,2)
+        # placing Aquifer Hydraulic Conductivity Widget on Screen
+        aqfr_hydr_cond_row = QHBoxLayout() 
+        aqfr_hydr_cond_row.addWidget(self.aqfr_hydr_cond)
+        aqfr_hydr_cond_row.addWidget(self.aqfr_hydr_cond_input)
+        layout.addLayout(aqfr_hydr_cond_row)
+
 
         self.aqfr_spec_storage = QLabel("Aquifer Specific Storage")
         self.aqfr_spec_storage_input = QLineEdit(self)
         self.aqfr_spec_storage.setStyleSheet(label_stylesheet)
-        layout.addWidget(self.aqfr_spec_storage, 2, 0, 1, 3)
-        layout.addWidget(self.aqfr_spec_storage_input, 2, 3, 1, 2)
-        
+        aqfr_spec_storage_row= QHBoxLayout()
+        aqfr_spec_storage_row.addWidget(self.aqfr_spec_storage)
+        aqfr_spec_storage_row.addWidget(self.aqfr_spec_storage_input)
+        layout.addLayout(aqfr_spec_storage_row)
+
+
         self.aqfr_spec_yield = QLabel("Aquifer Specific Yield")
         self.aqfr_spec_yield_input = QLineEdit(self)
         self.aqfr_spec_yield.setStyleSheet(label_stylesheet)
-        layout.addWidget(self.aqfr_spec_yield, 3, 0, 1, 3)
-        layout.addWidget(self.aqfr_spec_yield_input, 3, 3, 1, 2)
         
+        aqfr_spec_yield_row = QHBoxLayout()
+        aqfr_spec_yield_row.addWidget(self.aqfr_spec_yield)
+        aqfr_spec_yield_row.addWidget(self.aqfr_spec_yield_input)
+        layout.addLayout(aqfr_spec_yield_row)
+
         self.aqfr_thickness = QLabel("Aquifer Thickness")
         self.aqfr_thickness_input = QLineEdit(self)
         self.aqfr_thickness.setStyleSheet(label_stylesheet)
-        layout.addWidget(self.aqfr_thickness, 4, 0, 1, 3)
-        layout.addWidget(self.aqfr_thickness_input, 4, 3, 1, 2)
-        
+
+        aqfr_thickness_row = QHBoxLayout()
+        aqfr_thickness_row.addWidget(self.aqfr_thickness)
+        aqfr_thickness_row.addWidget(self.aqfr_thickness_input)
+        layout.addLayout(aqfr_thickness_row)
+
         self.aqfrd_thickness = QLabel("Aquitard Thickness")
         self.aqfrd_thickness_input = QLineEdit(self)
         self.aqfrd_thickness.setStyleSheet(label_stylesheet)
-        layout.addWidget(self.aqfrd_thickness, 5, 0, 1, 3)
-        layout.addWidget(self.aqfrd_thickness_input, 5, 3, 1, 2)
+        aqfrd_thickness_row = QHBoxLayout()
+        aqfrd_thickness_row.addWidget(self.aqfrd_thickness)
+        aqfrd_thickness_row.addWidget(self.aqfrd_thickness_input)
+        layout.addLayout(aqfrd_thickness_row)
         
         self.aqfrd_vert_cond= QLabel("Aquitard Vertical conductivity")
         self.aqfrd_vert_cond_input= QLineEdit(self)
         self.aqfrd_vert_cond.setStyleSheet(label_stylesheet)
-        layout.addWidget(self.aqfrd_vert_cond, 6, 0, 1, 3)
-        layout.addWidget(self.aqfrd_vert_cond_input, 6, 3, 1, 2)
+
+        aqfrd_vert_cond_row = QHBoxLayout()
+        aqfrd_vert_cond_row.addWidget(self.aqfrd_vert_cond)
+        aqfrd_vert_cond_row.addWidget(self.aqfrd_vert_cond_input)
+        layout.addLayout(aqfrd_vert_cond_row)
         
         self.aqfrd_spec_storage = QLabel("Aquitard Specific storage")
         self.aqfrd_spec_storage_input = QLineEdit(self)
         self.aqfrd_spec_storage.setStyleSheet(label_stylesheet)
-        layout.addWidget(self.aqfrd_spec_storage, 7, 0, 1, 3)
-        layout.addWidget(self.aqfrd_spec_storage_input, 7, 3, 1, 2)
 
+        aqfrd_spec_storage_row = QHBoxLayout()
+        aqfrd_spec_storage_row.addWidget(self.aqfrd_spec_storage)
+        aqfrd_spec_storage_row.addWidget(self.aqfrd_spec_storage_input)
+        layout.addLayout(aqfrd_spec_storage_row)
+
+
+        button_row_layout = QHBoxLayout()
         self.update_btn = QPushButton(text="Update", parent=self)
         self.update_btn.setStyleSheet("""
         """)
-        layout.addWidget(self.update_btn, 8, 0, 1, 2)
+        button_row_layout.addWidget(self.update_btn)
 
         self.save_btn = QPushButton(text="Save", parent=self)
         self.save_btn.clicked.connect(self.next)
         self.save_btn.setStyleSheet("""
         """)   
-        layout.addWidget(self.save_btn, 8, 3, 1, 2)
+        button_row_layout.addWidget(self.save_btn)
+        layout.addLayout(button_row_layout)
 
         self.setLayout(layout)
 
@@ -262,13 +291,17 @@ class Screen3(QWidget):
 
 
 app = QApplication(sys.argv)
-
-page_1 = Page_1()
+screen1 = Screen1()
 screen2 = Screen2()
 screen3 = Screen3("data.csv")
 
 widget = QStackedWidget()
-widget.addWidget(page_1)
+widget.setStyleSheet("""
+    background-color: white;
+    color: black;
+""")
+
+widget.addWidget(screen1)
 widget.addWidget(screen2)
 widget.addWidget(screen3)
 widget.show()
