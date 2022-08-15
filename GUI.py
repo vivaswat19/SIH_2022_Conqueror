@@ -124,7 +124,7 @@ class Screen2(QWidget):
         self.langs ={'T1':False, 'T2':False, 'T3':False, 'T4':False,'T5':False,'T6':False}
         self.setWindowTitle("Pumping test Model")
 
-        layout = QGridLayout()
+        layout = QVBoxLayout(self)
 
         
         label_stylesheet = """
@@ -142,58 +142,77 @@ class Screen2(QWidget):
         self.page_1_heading.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.page_1_heading.setStyleSheet("""
             QWidget {
-                color: red;
                 font: bold 30px;
                 padding: 20px;
+                max-height: 50px;
             }
         """)
-        layout.addWidget(self.page_1_heading, 0, 0, 3, 5)
+        layout.addWidget(self.page_1_heading)
+
 
         
         self.checkBox_t1 = QCheckBox(self)
         self.checkBox_t1.setText("Confined (Thesis)")
         self.checkBox_t1.setStyleSheet(label_stylesheet)
 
-        layout.addWidget(self.checkBox_t1, 3, 0, 2, 5)
+        
+        checkbox_row1 = QHBoxLayout() 
+        checkbox_row1.addWidget(self.checkBox_t1)
+        layout.addLayout(checkbox_row1)
         
         self.checkBox_t2 = QCheckBox(self)
         self.checkBox_t2.setText("Confined (Wellborn storage; numerical)")
         self.checkBox_t2.setStyleSheet(label_stylesheet)
-        layout.addWidget(self.checkBox_t2, 4, 0, 2, 5)
+        checkbox_row2 = QHBoxLayout() 
+        checkbox_row2.addWidget(self.checkBox_t2)
+        layout.addLayout(checkbox_row2)
         
         self.checkBox_t3 = QCheckBox(self)
         self.checkBox_t3.setText("Leaky (Hantush and Jacob)")
         self.checkBox_t3.setStyleSheet(label_stylesheet)
-        layout.addWidget(self.checkBox_t3, 5, 0, 2, 5)
+        checkbox_row3 = QHBoxLayout() 
+        checkbox_row3.addWidget(self.checkBox_t3)
+        layout.addLayout(checkbox_row3)
         
         self.checkBox_t4 = QCheckBox(self)
         self.checkBox_t4.setText("Leaky (Hantush, 1960; short-term; aquitard storage)")
         self.checkBox_t4.setStyleSheet(label_stylesheet)
-        layout.addWidget(self.checkBox_t4, 6, 0, 2, 5)
+        checkbox_row4 = QHBoxLayout() 
+        checkbox_row4.addWidget(self.checkBox_t4)
+        layout.addLayout(checkbox_row4)
         
         self.checkBox_t5 = QCheckBox(self)
         self.checkBox_t5.setText("Unconfined (Thesis, using Sy)")
         self.checkBox_t5.setStyleSheet(label_stylesheet)
-        layout.addWidget(self.checkBox_t5, 7, 0, 2, 5)
+        checkbox_row5 = QHBoxLayout() 
+        checkbox_row5.addWidget(self.checkBox_t5)
+        layout.addLayout(checkbox_row5)
         
         self.checkBox_t6 = QCheckBox(self)
         self.checkBox_t6.setText("Unconfined (Dupuit; wellborn storage; numerical)")
         self.checkBox_t6.setStyleSheet(label_stylesheet)
-        layout.addWidget(self.checkBox_t6, 8, 0, 2, 5)
+        checkbox_row6 = QHBoxLayout() 
+        checkbox_row6.addWidget(self.checkBox_t6)
+        layout.addLayout(checkbox_row6)
 
-        self.setLayout(layout)
+        button_row_layout = QHBoxLayout()
 
         self.last = QPushButton(text="last page", parent=self)
         self.last.clicked.connect(self.lastpage)
         self.last.setStyleSheet("""
         """)
-        layout.addWidget(self.last, 11, 0, 2, 2)
+
+        button_row_layout.addWidget(self.last)
 
         self.next = QPushButton(text="next page", parent=self)
         self.next.clicked.connect(self.nextpage)
         self.next.setStyleSheet("""
         """)   
-        layout.addWidget(self.next, 11, 3, 2, 2)
+        
+        button_row_layout.addWidget(self.next)
+        layout.addLayout(button_row_layout)
+
+        self.setLayout(layout)
 
     def nextpage(self):
         self.langs["T1"] = self.checkBox_t1.isChecked()
