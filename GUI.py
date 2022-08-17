@@ -186,11 +186,10 @@ class Screen2(QWidget):
 
 
 class Screen3(QWidget):
-    def __init__(self, fileName, parent = None):
+    def __init__(self, parent = None):
         super(Screen3, self).__init__(parent)
         self.setWindowTitle("Aquifer Test")
         
-
         self.page_1_heading = QLabel("<h1> Screen 3 </h1>",self)
         self.page_1_heading.setAlignment(Qt.AlignmentFlag.AlignCenter)
         wellRadiusLayout = QHBoxLayout()
@@ -205,7 +204,6 @@ class Screen3(QWidget):
         self.pumping_rate_input = QLineEdit(self)
         pumpingRateLayout.addWidget(self.pumping_rate_input)
 
-        self.fileName = fileName
         self.model = QStandardItemModel(self)
 
         self.tableView = QTableView(self)
@@ -230,6 +228,10 @@ class Screen3(QWidget):
         self.layoutVertical.addWidget(self.tableView)
         self.layoutVertical.addLayout(csvButtonLayout)
         
+
+    def getFile(self):
+        fileName = QFileDialog.getOpenFileName(filter = "csv (*.csv)")[0]
+        self.loadCsv(fileName)
 
     def loadCsv(self, fileName):
         with open(fileName, "r") as fileInput:
@@ -259,14 +261,14 @@ class Screen3(QWidget):
 
     @pyqtSlot()
     def on_pushButtonLoad_clicked(self):
-        self.loadCsv(self.fileName)
+        self.getFile()
 
 
 app = QApplication(sys.argv)
 
 window = MainWindow()
 screen2 = Screen2()
-screen3 = Screen3("data.csv")
+screen3 = Screen3()
 
 widget = QStackedWidget()
 widget.addWidget(window)
