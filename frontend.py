@@ -392,9 +392,12 @@ class Screen3(QWidget):
 
     def last(self):
         widget.setCurrentIndex(widget.currentIndex() - 1) 
-    def next(Self):
+    def next(self):
+        payload.r = self.well_radius_input.text()
+        payload.q = self.pumping_rate_input.text()
+        # payload.setValues()
         # widget.setCurrentIndex(widget.currentIndex() + 1)
-        print(vars(payload))
+        # print(vars(payload))
 
     @pyqtSlot()
     def on_pushButtonWrite_clicked(self):

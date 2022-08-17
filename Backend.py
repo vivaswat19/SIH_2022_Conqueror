@@ -8,14 +8,14 @@ import sys
 
 class DataSet:
     
-    def __init__(self):
+    def __init__(self,filepath):
         # pumping test data (time and drawdown arrays)
         self.t = []
         self.tr2 =[]
         self.s = []
         lineInput = []        
-        inputFile = open('transducer.txt','r')
-        for line in inputFile: lineInput.append(line.split())
+        inputFile = open(filepath,'r')
+        for line in inputFile: lineInput.append(line.split(','))
         inputFile.close()
         for i in range(1, len(lineInput)):
             self.t.append(float(lineInput[i][0]))
@@ -49,10 +49,10 @@ class Aquifer:
         
 class Well:
     
-    def __init__(self, t0, tEnd,filePath):
+    def __init__(self, t0, tEnd):
         # well properties
         lineInput = []        
-        inputFile = open(filePath,'r')
+        inputFile = open("well.txt",'r')
         for line in inputFile: lineInput.append(line.split())
         inputFile.close()
         self.r = float(lineInput[0][1])     # well radius; assume radial distance for monitoring drawdown
