@@ -1,5 +1,5 @@
 from Backend import *
-class Controller:
+class connector:
     def __init__(self):
         self.t1=False
         self.t2=False

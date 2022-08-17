@@ -1,9 +1,13 @@
+import imp
 import sys
 
 import csv
 from PyQt6.QtCore import *
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
+from connector import *
+
+payload = connector()
 
 class Screen1(QWidget):
     def __init__(self):
