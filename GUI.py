@@ -212,21 +212,23 @@ class Screen3(QWidget):
         self.tableView.setModel(self.model)
         self.tableView.horizontalHeader().setStretchLastSection(True)
 
+        csvButtonLayout = QHBoxLayout()
         self.pushButtonLoad = QPushButton(self)
         self.pushButtonLoad.setText("Load Csv File!")
         self.pushButtonLoad.clicked.connect(self.on_pushButtonLoad_clicked)
-
+        
         self.pushButtonWrite = QPushButton(self)
         self.pushButtonWrite.setText("Write Csv File!")
         self.pushButtonWrite.clicked.connect(self.on_pushButtonWrite_clicked)
+        csvButtonLayout.addWidget(self.pushButtonLoad)
+        csvButtonLayout.addWidget(self.pushButtonWrite)
 
         self.layoutVertical = QVBoxLayout(self)
         self.layoutVertical.addWidget(self.page_1_heading)
         self.layoutVertical.addLayout(wellRadiusLayout)
         self.layoutVertical.addLayout(pumpingRateLayout)
         self.layoutVertical.addWidget(self.tableView)
-        self.layoutVertical.addWidget(self.pushButtonLoad)
-        self.layoutVertical.addWidget(self.pushButtonWrite)
+        self.layoutVertical.addLayout(csvButtonLayout)
         
 
     def loadCsv(self, fileName):
