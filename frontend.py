@@ -184,7 +184,6 @@ class Screen1(QWidget):
 class Screen2(QWidget):
     def __init__(self):
         super().__init__()
-        self.langs ={'T1':False, 'T2':False, 'T3':False, 'T4':False,'T5':False,'T6':False}
         self.setWindowTitle("Pumping test Model")
 
         layout = QVBoxLayout(self)
@@ -285,12 +284,12 @@ class Screen2(QWidget):
         self.setLayout(layout)
 
     def nextpage(self):
-        self.langs["T1"] = self.checkBox_t1.isChecked()
-        self.langs["T2"] = self.checkBox_t2.isChecked()
-        self.langs["T3"] = self.checkBox_t3.isChecked()
-        self.langs["T4"] = self.checkBox_t4.isChecked()
-        self.langs["T5"] = self.checkBox_t5.isChecked()
-        self.langs["T6"] = self.checkBox_t6.isChecked()
+        payload.t1 = self.checkBox_t1.isChecked()
+        payload.t2 = self.checkBox_t2.isChecked()
+        payload.t3 = self.checkBox_t3.isChecked()
+        payload.t4 = self.checkBox_t4.isChecked()
+        payload.t5 = self.checkBox_t5.isChecked()
+        payload.t6 = self.checkBox_t6.isChecked()
         widget.setCurrentIndex(widget.currentIndex() + 1)  
     def lastpage(self):
         widget.setCurrentIndex(widget.currentIndex() - 1)  
@@ -332,17 +331,30 @@ class Screen3(QWidget):
         csvButtonLayout.addWidget(self.pushButtonLoad)
         csvButtonLayout.addWidget(self.pushButtonWrite)
 
+        page_change_ButtonLayout = QHBoxLayout()
+        self.pushButtonLoad = QPushButton(self)
+        self.pushButtonLoad.setText("Previous Page")
+        self.pushButtonLoad.clicked.connect(self.on_pushButtonlast_clicked)
+        
+        self.pushButtonWrite = QPushButton(self)
+        self.pushButtonWrite.setText("Evaluate")
+        self.pushButtonWrite.clicked.connect(self.on_pushButtonnext_clicked)
+        page_change_ButtonLayout.addWidget(self.pushButtonLoad)
+        page_change_ButtonLayout.addWidget(self.pushButtonWrite)
+
         self.layoutVertical = QVBoxLayout(self)
         self.layoutVertical.addWidget(self.page_1_heading)
         self.layoutVertical.addLayout(wellRadiusLayout)
         self.layoutVertical.addLayout(pumpingRateLayout)
         self.layoutVertical.addWidget(self.tableView)
         self.layoutVertical.addLayout(csvButtonLayout)
+        self.layoutVertical.addLayout(page_change_ButtonLayout)
         
 
     def getFile(self):
         try:
             fileName = QFileDialog.getOpenFileName(filter = "csv (*.csv)")[0]
+            payload.filePath=fileName
             self.loadCsv(fileName)
         except:
             print("Ok")
@@ -369,6 +381,12 @@ class Screen3(QWidget):
                 ]
                 writer.writerow(fields)
 
+    def last(self):
+        widget.setCurrentIndex(widget.currentIndex() - 1) 
+    def next(Self):
+        # widget.setCurrentIndex(widget.currentIndex() + 1)
+        print(vars(payload))
+
     @pyqtSlot()
     def on_pushButtonWrite_clicked(self):
         self.writeCsv(self.fileName)
@@ -376,6 +394,14 @@ class Screen3(QWidget):
     @pyqtSlot()
     def on_pushButtonLoad_clicked(self):
         self.getFile()
+
+    @pyqtSlot()
+    def on_pushButtonlast_clicked(self):
+        self.last()
+
+    @pyqtSlot()
+    def on_pushButtonnext_clicked(self):
+        self.next()
 
 
 app = QApplication(sys.argv)
