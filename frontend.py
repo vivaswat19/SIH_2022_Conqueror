@@ -179,6 +179,15 @@ class Screen1(QWidget):
         self.setLayout(layout)
 
     def next(self):
+        # collecting data from input box
+        payload.K = self.aqfr_hydr_cond_input.text()
+        payload.Ss = self.aqfr_spec_storage_input.text()
+        payload.Sy = self.aqfr_spec_yield_input.text()
+        payload.b = self.aqfr_thickness_input.text()
+        payload.bc = self.aqfrd_thickness_input.text()
+        payload.Kc = self.aqfrd_vert_cond_input.text()
+        payload.Ssc = self.aqfrd_spec_storage_input.text()
+
         widget.setCurrentIndex(widget.currentIndex() + 1)       
 
 class Screen2(QWidget):
