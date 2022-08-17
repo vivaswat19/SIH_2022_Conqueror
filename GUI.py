@@ -293,13 +293,12 @@ class Screen2(QWidget):
 
 
 class Screen3(QWidget):
-    def __init__(self, fileName, parent = None):
+    def __init__(self, parent = None):
         super(Screen3, self).__init__(parent)
         self.setWindowTitle("Aquifer Test")
         
-
         self.page_1_heading = QLabel("<h1> Screen 3 </h1>",self)
-
+        self.page_1_heading.setAlignment(Qt.AlignmentFlag.AlignCenter)
         wellRadiusLayout = QHBoxLayout()
         self.well_radius = QLabel("<h3> Well Radius </h3>")
         wellRadiusLayout.addWidget(self.well_radius)
@@ -312,29 +311,34 @@ class Screen3(QWidget):
         self.pumping_rate_input = QLineEdit(self)
         pumpingRateLayout.addWidget(self.pumping_rate_input)
 
-        self.fileName = fileName
         self.model = QStandardItemModel(self)
 
         self.tableView = QTableView(self)
         self.tableView.setModel(self.model)
         self.tableView.horizontalHeader().setStretchLastSection(True)
 
+        csvButtonLayout = QHBoxLayout()
         self.pushButtonLoad = QPushButton(self)
         self.pushButtonLoad.setText("Load Csv File!")
         self.pushButtonLoad.clicked.connect(self.on_pushButtonLoad_clicked)
-
+        
         self.pushButtonWrite = QPushButton(self)
         self.pushButtonWrite.setText("Write Csv File!")
         self.pushButtonWrite.clicked.connect(self.on_pushButtonWrite_clicked)
+        csvButtonLayout.addWidget(self.pushButtonLoad)
+        csvButtonLayout.addWidget(self.pushButtonWrite)
 
         self.layoutVertical = QVBoxLayout(self)
         self.layoutVertical.addWidget(self.page_1_heading)
         self.layoutVertical.addLayout(wellRadiusLayout)
         self.layoutVertical.addLayout(pumpingRateLayout)
         self.layoutVertical.addWidget(self.tableView)
-        self.layoutVertical.addWidget(self.pushButtonLoad)
-        self.layoutVertical.addWidget(self.pushButtonWrite)
+        self.layoutVertical.addLayout(csvButtonLayout)
         
+
+    def getFile(self):
+        fileName = QFileDialog.getOpenFileName(filter = "csv (*.csv)")[0]
+        self.loadCsv(fileName)
 
     def loadCsv(self, fileName):
         with open(fileName, "r") as fileInput:
@@ -364,7 +368,7 @@ class Screen3(QWidget):
 
     @pyqtSlot()
     def on_pushButtonLoad_clicked(self):
-        self.loadCsv(self.fileName)
+        self.getFile()
 
 
 app = QApplication(sys.argv)
