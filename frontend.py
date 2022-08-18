@@ -409,8 +409,8 @@ class Screen3(QWidget):
         if(self.pumping_rate_input.text() != ""):
             payload.q = self.pumping_rate_input.text()
         payload.setValues()
+        screen4.update_data_label()
         widget.setCurrentIndex(widget.currentIndex() + 1)
-        print(vars(payload))
 
     @pyqtSlot()
     def on_pushButtonWrite_clicked(self):
@@ -441,8 +441,10 @@ class Screen4(QWidget):
         self.cb.currentIndexChanged.connect(self.selectionChange)
         data_container.addWidget(self.cb)
 
-        self.data_output = QLabel("Output")
-        data_container.addWidget(self.data_output)
+        self.s_output = QLabel()
+        self.t_output = QLabel()
+        data_container.addWidget(self.s_output)
+        data_container.addWidget(self.t_output)
 
 
         self.figure = plt.figure()
@@ -451,7 +453,6 @@ class Screen4(QWidget):
         self.button.clicked.connect(self.plot)
 
         layout.addWidget(self.canvas)
-        layout.addWidget(self.button)
         layout.addLayout(data_container)
 
         self.setLayout(layout)
@@ -463,9 +464,14 @@ class Screen4(QWidget):
         ax.plot(data, '*-')
         self.canvas.draw()
 
+    def update_data_label(self):
+        (s,t) = payload.getValues()
+        self.s_output.setText(str(s))
+        self.t_output.setText(str(t))
 
     def selectionChange(self, index):
         print(index)
+
 
 
 app = QApplication(sys.argv)
