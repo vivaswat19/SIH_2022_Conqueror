@@ -144,19 +144,19 @@ class Screen1(QWidget):
 
         # Update and Save Button Widget
         button_row_layout = QHBoxLayout()
-        self.update_btn = QPushButton(text="Update", parent=self)
+        self.update_btn = QPushButton(text="Update")
         self.update_btn.setStyleSheet(button_stylesheet)
         button_row_layout.addWidget(self.update_btn)
 
-        self.save_btn = QPushButton(text="Save", parent=self)
+        self.save_btn = QPushButton(text="Save")
         self.save_btn.setStyleSheet(button_stylesheet)
-        self.save_btn.clicked.connect(self.next)
+        self.save_btn.clicked.connect(self.screen_2)
         button_row_layout.addWidget(self.save_btn)
         
         layout.addLayout(button_row_layout)
         self.setLayout(layout)
 
-    def next(self):
+    def screen_2(self):
         # collecting data from input box
         if(self.aqfr_hydr_cond_input.text() != ""):
             payload.K = self.aqfr_hydr_cond_input.text()
@@ -241,14 +241,14 @@ class Screen2(QWidget):
 
         button_row_layout = QHBoxLayout()
 
-        self.last = QPushButton(text="Previous Page", parent=self)
-        self.last.clicked.connect(self.lastpage)
+        self.last = QPushButton(text="Previous Page")
+        self.last.clicked.connect(self.screen_1)
         self.last.setStyleSheet(button_stylesheet)
 
         button_row_layout.addWidget(self.last)
 
-        self.next = QPushButton(text="Save", parent=self)
-        self.next.clicked.connect(self.nextpage) 
+        self.next = QPushButton(text="Save")
+        self.next.clicked.connect(self.screen_3) 
         self.next.setStyleSheet(button_stylesheet)
         
         button_row_layout.addWidget(self.next)
@@ -256,15 +256,30 @@ class Screen2(QWidget):
 
         self.setLayout(layout)
 
-    def nextpage(self):
+    def screen_3(self):
         payload.t1 = self.checkBox_t1.isChecked()
         payload.t2 = self.checkBox_t2.isChecked()
         payload.t3 = self.checkBox_t3.isChecked()
         payload.t4 = self.checkBox_t4.isChecked()
         payload.t5 = self.checkBox_t5.isChecked()
         payload.t6 = self.checkBox_t6.isChecked()
+
+        if(self.checkBox_t1.isChecked()):
+            screen4.cb.addItem(self.checkBox_t1.text())
+        if(self.checkBox_t2.isChecked()):
+            screen4.cb.addItem(self.checkBox_t2.text())
+        if(self.checkBox_t3.isChecked()):
+            screen4.cb.addItem(self.checkBox_t3.text())
+        if(self.checkBox_t4.isChecked()):
+            screen4.cb.addItem(self.checkBox_t4.text())
+        if(self.checkBox_t5.isChecked()):
+            screen4.cb.addItem(self.checkBox_t5.text())
+        if(self.checkBox_t6.isChecked()):
+            screen4.cb.addItem(self.checkBox_t6.text())
+
         widget.setCurrentIndex(widget.currentIndex() + 1)  
-    def lastpage(self):
+    
+    def screen_1(self):
         widget.setCurrentIndex(widget.currentIndex() - 1)  
 
 class Screen3(QWidget):
@@ -373,10 +388,10 @@ class Screen3(QWidget):
                 ]
                 writer.writerow(fields)
 
-    def last(self):
+    def screen_2(self):
         widget.setCurrentIndex(widget.currentIndex() - 1) 
     
-    def next(self):
+    def screen_4(self):
         if(self.well_radius_input.text() != ""):
             payload.r = self.well_radius_input.text()
         if(self.pumping_rate_input.text() != ""):
@@ -384,8 +399,10 @@ class Screen3(QWidget):
         
         payload.setValues()
         screen4.update_data_label()
-        screen4.selectionChange()
+        screen4.cb.currentIndexChanged.connect(screen4.selection_Change)
+        screen4.selection_Change()
         widget.setCurrentIndex(widget.currentIndex() + 1)
+    
     @pyqtSlot()
     def on_pushButtonWrite_clicked(self):
         self.writeCsv(self.fileName)
@@ -398,11 +415,11 @@ class Screen3(QWidget):
 
     @pyqtSlot()
     def on_pushButtonlast_clicked(self):
-        self.last()
+        self.screen_2()
 
     @pyqtSlot()
     def on_pushButtonnext_clicked(self):
-        self.next()
+        self.screen_4()
 
 
 class Screen4(QWidget):
@@ -413,8 +430,6 @@ class Screen4(QWidget):
         data_container = QVBoxLayout()
 
         self.cb = QComboBox()
-        self.cb.addItems(['a','b','c'])
-        self.cb.currentIndexChanged.connect(self.selectionChange)
         data_container.addWidget(self.cb)
 
         self.s_output = QLabel()
@@ -423,10 +438,10 @@ class Screen4(QWidget):
         data_container.addWidget(self.t_output)
 
 
-        self.figure = plt.figure()
+        self.figure = plt.figure(dpi=200)
         self.canvas = FigureCanvas(self.figure)
-
         layout.addWidget(self.canvas)
+
         layout.addLayout(data_container)
 
         self.setLayout(layout)
@@ -436,19 +451,31 @@ class Screen4(QWidget):
         self.s_output.setText(str(s))
         self.t_output.setText(str(t))
 
-    def selectionChange(self,index=0):
-        if index==0:
-            x,y = payload.graph1()
-        elif index==1:
-            x,y = payload.graph2()
-        elif index==2:
-            x,y = payload.graph3()
+    def selection_Change(self,index=0):
+        x=[]
+        y=[]
+        try:
+            if(self.cb.itemText(index) == "Confined (Thesis)"):
+                x,y = payload.graph1()
+            elif(self.cb.itemText(index) == "Confined (Wellborn storage; numerical)"):
+                x,y = payload.graph2()
+            elif(self.cb.itemText(index) == "Leaky (Hantush and Jacob)"):
+                x,y = payload.graph3()
+            elif(self.cb.itemText(index) == "Leaky (Hantush, 1960; short-term; aquitard storage)"):
+                x,y = payload.graph4()
+            elif(self.cb.itemText(index) == "Unconfined (Thesis, using Sy)"):
+                x,y = payload.graph5()
+            elif(self.cb.itemText(index) == "Unconfined (Dupuit; wellborn storage; numerical)"):
+                x,y = payload.graph6()
+        except:
+            print("Graph not found!")
+        
         self.figure.clear()
         ax = self.figure.add_subplot(111)
         for i in range(len(x)):
             ax.plot(x[i],y[i])
+        
         self.canvas.draw()
-        print(index)
 
 
 
@@ -463,7 +490,7 @@ widget.setStyleSheet("""
     background-color: white;
     color: black;
 """)
-widget.setFixedSize(600,600)
+widget.setFixedSize(800,600)
 widget.setWindowFlags(Qt.WindowType.CustomizeWindowHint | Qt.WindowType.WindowCloseButtonHint | Qt.WindowType.WindowMinimizeButtonHint)
 
 widget.addWidget(screen1)

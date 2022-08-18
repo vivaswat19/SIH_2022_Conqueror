@@ -1,7 +1,7 @@
-K	0
-Ss	0
-Sy	0
-b	0
-bc	0
-Kc	0
-Ssc	0
+K	1
+Ss	11
+Sy	1
+b	1
+bc	1
+Kc	1
+Ssc	1

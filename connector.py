@@ -45,7 +45,6 @@ class connector:
         self.well=Well(self.data.t.min(), self.data.t.max())
         self.data.setTr2Array(self.well.r)
         self.aquifer=Aquifer()
-        
 
         # set up test objects using current parameter values
         self.theis = Theis(self.aquifer, self.well)
