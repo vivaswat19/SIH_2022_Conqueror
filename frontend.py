@@ -1,14 +1,11 @@
-import imp
 import sys
-
 import csv
 from PyQt6.QtCore import *
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
 from connector import *
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 payload = connector()
 
@@ -418,10 +415,11 @@ class Screen3(QWidget):
             payload.r = self.well_radius_input.text()
         if(self.pumping_rate_input.text() != ""):
             payload.q = self.pumping_rate_input.text()
+        
         payload.setValues()
         screen4.update_data_label()
+        screen4.selectionChange()
         widget.setCurrentIndex(widget.currentIndex() + 1)
-        
     @pyqtSlot()
     def on_pushButtonWrite_clicked(self):
         self.writeCsv(self.fileName)
@@ -449,7 +447,7 @@ class Screen4(QWidget):
         data_container = QVBoxLayout()
 
         self.cb = QComboBox()
-        self.cb.addItems(['a','b','c','d'])
+        self.cb.addItems(['a','b','c'])
         self.cb.currentIndexChanged.connect(self.selectionChange)
         data_container.addWidget(self.cb)
 
@@ -461,27 +459,29 @@ class Screen4(QWidget):
 
         self.figure = plt.figure()
         self.canvas = FigureCanvas(self.figure)
-        self.button = QPushButton('Plot')
-        self.button.clicked.connect(self.plot)
 
         layout.addWidget(self.canvas)
         layout.addLayout(data_container)
 
         self.setLayout(layout)
 
-    def plot(self):
-        data = [random.random() for i in range(10)]
-        self.figure.clear()
-        ax = self.figure.add_subplot(111)
-        ax.plot(data, '*-')
-        self.canvas.draw()
-
     def update_data_label(self):
         (s,t) = payload.getValues()
         self.s_output.setText(str(s))
         self.t_output.setText(str(t))
 
-    def selectionChange(self, index):
+    def selectionChange(self,index=0):
+        if index==0:
+            x,y = payload.graph1()
+        elif index==1:
+            x,y = payload.graph2()
+        elif index==2:
+            x,y = payload.graph3()
+        self.figure.clear()
+        ax = self.figure.add_subplot(111)
+        for i in range(len(x)):
+            ax.plot(x[i],y[i])
+        self.canvas.draw()
         print(index)
 
 
