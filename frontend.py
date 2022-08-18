@@ -411,7 +411,7 @@ class Screen3(QWidget):
         payload.setValues()
         screen4.update_data_label()
         widget.setCurrentIndex(widget.currentIndex() + 1)
-
+        
     @pyqtSlot()
     def on_pushButtonWrite_clicked(self):
         self.writeCsv(self.fileName)
