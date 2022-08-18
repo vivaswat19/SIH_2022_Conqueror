@@ -1,50 +1,16 @@
 import sys
 import csv
+import matplotlib.pyplot as plt
+
+
 from PyQt6.QtCore import *
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
 from connector import *
-import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from styles import *
 
 payload = connector()
-
-label_stylesheet = """
-    QWidget {
-        font: 20px;
-        font-weight: 400;
-        padding-left: 0px;
-        padding-right: 5px;
-        padding-bottom: 10px;
-    }
-"""
-
-line_edit_stylesheet = """
-    QLineEdit {
-        text-align: center;
-        font: italic 20px;
-        min-width: 150px;
-        max-width: 200px;
-    }
-"""
-
-button_stylesheet = """
-    QPushButton {
-        font: bold 20px;
-        min-width: 225;
-        max-width: 250;
-    }
-"""
-
-button_disabled_stylesheet = """
-    QPushButton {
-        font: bold 20px;
-        min-width: 225;
-        max-width: 250;
-        background-color: rgb(69, 69, 69);
-        color: white;
-    }
-"""
 
 class Screen1(QWidget):
     def __init__(self):
