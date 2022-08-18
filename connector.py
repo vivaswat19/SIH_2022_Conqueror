@@ -22,8 +22,8 @@ class connector:
         self.r = 0
     def getValues(self):
         return self.aquifer.S,self.aquifer.T
-    def setValues(self): 
 
+    def setValues(self): 
         output_file = open('aquifer.txt','w')
         output_file.writelines(['K', '\t', str(self.K),'\n'])
         output_file.writelines(['Ss', '\t', str(self.Ss), '\n'])

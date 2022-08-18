@@ -6,6 +6,9 @@ from PyQt6.QtCore import *
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
 from connector import *
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
+import matplotlib.pyplot as plt
 
 payload = connector()
 
@@ -180,13 +183,20 @@ class Screen1(QWidget):
 
     def next(self):
         # collecting data from input box
-        payload.K = self.aqfr_hydr_cond_input.text()
-        payload.Ss = self.aqfr_spec_storage_input.text()
-        payload.Sy = self.aqfr_spec_yield_input.text()
-        payload.b = self.aqfr_thickness_input.text()
-        payload.bc = self.aqfrd_thickness_input.text()
-        payload.Kc = self.aqfrd_vert_cond_input.text()
-        payload.Ssc = self.aqfrd_spec_storage_input.text()
+        if(self.aqfr_hydr_cond_input.text() != ""):
+            payload.K = self.aqfr_hydr_cond_input.text()
+        if(self.aqfr_spec_storage_input.text() != ""):
+            payload.Ss = self.aqfr_spec_storage_input.text()
+        if(self.aqfr_spec_yield_input.text() != ""):
+            payload.Sy = self.aqfr_spec_yield_input.text()
+        if(self.aqfr_thickness_input.text() != ""):
+            payload.b = self.aqfr_thickness_input.text()
+        if(self.aqfrd_thickness_input.text() != ""):
+            payload.bc = self.aqfrd_thickness_input.text()
+        if(self.aqfrd_vert_cond_input.text() != ""):
+            payload.Kc = self.aqfrd_vert_cond_input.text()
+        if(self.aqfrd_spec_storage_input.text() != ""):
+            payload.Ssc = self.aqfrd_spec_storage_input.text()
 
         widget.setCurrentIndex(widget.currentIndex() + 1)       
 
@@ -303,7 +313,6 @@ class Screen2(QWidget):
     def lastpage(self):
         widget.setCurrentIndex(widget.currentIndex() - 1)  
 
-
 class Screen3(QWidget):
     def __init__(self, parent = None):
         super(Screen3, self).__init__(parent)
@@ -335,7 +344,8 @@ class Screen3(QWidget):
         self.pushButtonLoad.clicked.connect(self.on_pushButtonLoad_clicked)
         
         self.pushButtonWrite = QPushButton(self)
-        self.pushButtonWrite.setText("Write Csv File!")
+        self.pushButtonWrite.setText("Update Csv File!")
+        self.pushButtonWrite.setDisabled(True)
         self.pushButtonWrite.clicked.connect(self.on_pushButtonWrite_clicked)
         csvButtonLayout.addWidget(self.pushButtonLoad)
         csvButtonLayout.addWidget(self.pushButtonWrite)
@@ -392,10 +402,15 @@ class Screen3(QWidget):
 
     def last(self):
         widget.setCurrentIndex(widget.currentIndex() - 1) 
+    
     def next(self):
-        payload.r = self.well_radius_input.text()
-        payload.q = self.pumping_rate_input.text()
-
+        if(self.well_radius_input.text() != ""):
+            payload.r = self.well_radius_input.text()
+        if(self.pumping_rate_input.text() != ""):
+            payload.q = self.pumping_rate_input.text()
+        payload.setValues()
+        widget.setCurrentIndex(widget.currentIndex() + 1)
+        print(vars(payload))
     @pyqtSlot()
     def on_pushButtonWrite_clicked(self):
         self.writeCsv(self.fileName)
@@ -413,10 +428,50 @@ class Screen3(QWidget):
         self.next()
 
 
+class Screen4(QWidget):
+    def __init__(self, parent = None):
+        super(Screen4, self).__init__(parent)
+
+        layout = QHBoxLayout()
+        data_container = QVBoxLayout()
+
+        self.cb = QComboBox()
+        self.cb.addItems(['a','b','c','d'])
+        self.cb.currentIndexChanged.connect(self.selectionChange)
+        data_container.addWidget(self.cb)
+
+        self.data_output = QLabel("Output")
+        data_container.addWidget(self.data_output)
+
+
+        self.figure = plt.figure()
+        self.canvas = FigureCanvas(self.figure)
+        self.button = QPushButton('Plot')
+        self.button.clicked.connect(self.plot)
+
+        layout.addWidget(self.canvas)
+        layout.addWidget(self.button)
+        layout.addLayout(data_container)
+
+        self.setLayout(layout)
+
+    def plot(self):
+        data = [random.random() for i in range(10)]
+        self.figure.clear()
+        ax = self.figure.add_subplot(111)
+        ax.plot(data, '*-')
+        self.canvas.draw()
+
+
+    def selectionChange(self, index):
+        print(index)
+
+
 app = QApplication(sys.argv)
 screen1 = Screen1()
 screen2 = Screen2()
 screen3 = Screen3()
+screen4 = Screen4()
 
 widget = QStackedWidget()
 widget.setStyleSheet("""
@@ -428,5 +483,6 @@ widget.setWindowFlags(Qt.WindowType.CustomizeWindowHint | Qt.WindowType.WindowCl
 widget.addWidget(screen1)
 widget.addWidget(screen2)
 widget.addWidget(screen3)
+widget.addWidget(screen4)
 widget.show()
 app.exec()
