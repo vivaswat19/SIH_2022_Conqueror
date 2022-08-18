@@ -1,14 +1,11 @@
-import imp
 import sys
-
 import csv
 from PyQt6.QtCore import *
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
 from connector import *
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 payload = connector()
 
@@ -408,9 +405,11 @@ class Screen3(QWidget):
             payload.r = self.well_radius_input.text()
         if(self.pumping_rate_input.text() != ""):
             payload.q = self.pumping_rate_input.text()
+        
         payload.setValues()
         widget.setCurrentIndex(widget.currentIndex() + 1)
-        print(vars(payload))
+        widget.update()
+        # print(vars(payload))
     @pyqtSlot()
     def on_pushButtonWrite_clicked(self):
         self.writeCsv(self.fileName)
@@ -441,7 +440,14 @@ class Screen4(QWidget):
         data_container.addWidget(self.cb)
 
         self.data_output = QLabel("Output")
+        self.data_output1 = QLabel(str(payload.s))
+        self.data_output2 = QLabel(str(payload.t))
+        
+
+
         data_container.addWidget(self.data_output)
+        data_container.addWidget(self.data_output1)
+        data_container.addWidget(self.data_output2)
 
 
         self.figure = plt.figure()
@@ -461,7 +467,11 @@ class Screen4(QWidget):
         ax = self.figure.add_subplot(111)
         ax.plot(data, '*-')
         self.canvas.draw()
-
+    
+    def data1(self):
+        s,t = payload.getValues()
+        print("Value of s:",s)
+        print("Value of t:",t)
 
     def selectionChange(self, index):
         print(index)
