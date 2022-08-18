@@ -407,9 +407,8 @@ class Screen3(QWidget):
             payload.q = self.pumping_rate_input.text()
         
         payload.setValues()
+        screen4.update_data_label()
         widget.setCurrentIndex(widget.currentIndex() + 1)
-        widget.update()
-        # print(vars(payload))
     @pyqtSlot()
     def on_pushButtonWrite_clicked(self):
         self.writeCsv(self.fileName)
@@ -439,15 +438,10 @@ class Screen4(QWidget):
         self.cb.currentIndexChanged.connect(self.selectionChange)
         data_container.addWidget(self.cb)
 
-        self.data_output = QLabel("Output")
-        self.data_output1 = QLabel(str(payload.s))
-        self.data_output2 = QLabel(str(payload.t))
-        
-
-
-        data_container.addWidget(self.data_output)
-        data_container.addWidget(self.data_output1)
-        data_container.addWidget(self.data_output2)
+        self.s_output = QLabel()
+        self.t_output = QLabel()
+        data_container.addWidget(self.s_output)
+        data_container.addWidget(self.t_output)
 
 
         self.figure = plt.figure()
@@ -456,7 +450,6 @@ class Screen4(QWidget):
         self.button.clicked.connect(self.plot)
 
         layout.addWidget(self.canvas)
-        layout.addWidget(self.button)
         layout.addLayout(data_container)
 
         self.setLayout(layout)
@@ -467,14 +460,15 @@ class Screen4(QWidget):
         ax = self.figure.add_subplot(111)
         ax.plot(data, '*-')
         self.canvas.draw()
-    
-    def data1(self):
-        s,t = payload.getValues()
-        print("Value of s:",s)
-        print("Value of t:",t)
+
+    def update_data_label(self):
+        (s,t) = payload.getValues()
+        self.s_output.setText(str(s))
+        self.t_output.setText(str(t))
 
     def selectionChange(self, index):
         print(index)
+
 
 
 app = QApplication(sys.argv)
