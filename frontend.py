@@ -393,8 +393,6 @@ class Screen3(QWidget):
     def last(self):
         widget.setCurrentIndex(widget.currentIndex() - 1) 
     def next(Self):
-        payload.setValues()
-
         # widget.setCurrentIndex(widget.currentIndex() + 1)
         # print(vars(payload))
 
