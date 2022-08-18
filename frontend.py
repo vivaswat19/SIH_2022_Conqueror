@@ -12,37 +12,49 @@ import matplotlib.pyplot as plt
 
 payload = connector()
 
+label_stylesheet = """
+    QWidget {
+        font: 20px;
+        font-weight: 400;
+        padding-left: 0px;
+        padding-right: 5px;
+        padding-bottom: 10px;
+    }
+"""
+
+line_edit_stylesheet = """
+    QLineEdit {
+        text-align: center;
+        font: italic 20px;
+        min-width: 150px;
+        max-width: 200px;
+    }
+"""
+
+button_stylesheet = """
+    QPushButton {
+        font: bold 20px;
+        min-width: 225;
+        max-width: 250;
+    }
+"""
+
+button_disabled_stylesheet = """
+    QPushButton {
+        font: bold 20px;
+        min-width: 225;
+        max-width: 250;
+        background-color: rgb(69, 69, 69);
+        color: white;
+    }
+"""
+
 class Screen1(QWidget):
     def __init__(self):
         super().__init__()
 
+        self.setWindowTitle("Pumping Test Desktop Application")
         layout = QVBoxLayout(self)
-        label_stylesheet = """
-            QWidget {
-                font: 20px;
-                font-weight: 400;
-                min-width: 300px;
-                max-width: 300px;
-            }
-        """
-        line_edit_stylesheet = """
-            QLineEdit {
-                text-align: center;
-                font: italic 20px;
-                min-width: 150px;
-                max-width: 200px;
-            }
-        """
-
-        button_stylesheet = """
-            QPushButton {
-                font: bold 20px;
-                min-width: 225;
-                max-width: 250;
-            }
-        """
-
-        self.setWindowTitle("Aquifer Test")
 
         # Main Page Heading
         self.page_1_heading = QLabel("Hydraulic Properties",self)
@@ -203,42 +215,23 @@ class Screen1(QWidget):
 class Screen2(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Pumping test Model")
+        # self.setWindowTitle("Pumping test Model")
 
         layout = QVBoxLayout(self)
         
-        label_stylesheet = """
-            QWidget {
-                font: 20px;
-                font-weight: 400;
-                padding-left: 0px;
-                padding-right: 5px;
-                padding-bottom: 10px;
-            }
-        """
-        button_stylesheet = """
-            QPushButton {
-                font: bold 20px;
-                min-width: 225;
-                max-width: 250;
-            }
-        """
-
-        
         # Main Page Heading
-        self.page_1_heading = QLabel("Select Testing Model",self)
-        self.page_1_heading.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.page_1_heading.setStyleSheet("""
+        self.page_2_heading = QLabel("Select Testing Model",self)
+        self.page_2_heading.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.page_2_heading.setStyleSheet("""
             QWidget {
                 font: bold 40px;
                 padding: 20px;
                 max-height: 50px;
             }
         """)
-        layout.addWidget(self.page_1_heading)
+        layout.addWidget(self.page_2_heading)
 
 
-        
         self.checkBox_t1 = QCheckBox(self)
         self.checkBox_t1.setText("Confined (Thesis)")
         self.checkBox_t1.setStyleSheet(label_stylesheet)
@@ -292,9 +285,7 @@ class Screen2(QWidget):
         button_row_layout.addWidget(self.last)
 
         self.next = QPushButton(text="Save", parent=self)
-        self.next.clicked.connect(self.nextpage)
-        self.next.setStyleSheet("""
-        """)   
+        self.next.clicked.connect(self.nextpage) 
         self.next.setStyleSheet(button_stylesheet)
         
         button_row_layout.addWidget(self.next)
@@ -316,64 +307,83 @@ class Screen2(QWidget):
 class Screen3(QWidget):
     def __init__(self, parent = None):
         super(Screen3, self).__init__(parent)
-        self.setWindowTitle("Aquifer Test")
-        
-        self.page_1_heading = QLabel("<h1> Screen 3 </h1>",self)
-        self.page_1_heading.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.layoutVertical = QVBoxLayout()
+
+        self.page_3_heading = QLabel("DrawDown Data")
+        self.page_3_heading.setStyleSheet("""
+            QWidget {
+                font: bold 40px;
+                padding: 20px;
+                max-height: 50px;
+            }
+        """)
+        self.page_3_heading.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.layoutVertical.addWidget(self.page_3_heading)
+
+
         wellRadiusLayout = QHBoxLayout()
-        self.well_radius = QLabel("<h3> Well Radius </h3>")
+        self.well_radius = QLabel("Well Radius")
+        self.well_radius.setStyleSheet(label_stylesheet)
         wellRadiusLayout.addWidget(self.well_radius)
-        self.well_radius_input = QLineEdit(self)
+        self.well_radius_input = QLineEdit()
+        self.well_radius_input.setStyleSheet(line_edit_stylesheet)
         wellRadiusLayout.addWidget(self.well_radius_input)
 
+        
         pumpingRateLayout = QHBoxLayout()
-        self.pumping_rate = QLabel("<h3> Pumping Rate </h3>")
+        self.pumping_rate = QLabel("Pumping Rate")
+        self.pumping_rate.setStyleSheet(label_stylesheet)
         pumpingRateLayout.addWidget(self.pumping_rate)
         self.pumping_rate_input = QLineEdit(self)
+        self.pumping_rate_input.setStyleSheet(line_edit_stylesheet)
         pumpingRateLayout.addWidget(self.pumping_rate_input)
 
-        self.model = QStandardItemModel(self)
-
-        self.tableView = QTableView(self)
+        
+        self.model = QStandardItemModel()
+        self.tableView = QTableView()
         self.tableView.setModel(self.model)
-        self.tableView.horizontalHeader().setStretchLastSection(True)
+        # self.tableView.horizontalHeader().setStretchLastSection(True)
 
         csvButtonLayout = QHBoxLayout()
-        self.pushButtonLoad = QPushButton(self)
+        self.pushButtonLoad = QPushButton()
         self.pushButtonLoad.setText("Load Csv File!")
+        self.pushButtonLoad.setStyleSheet(button_stylesheet)
         self.pushButtonLoad.clicked.connect(self.on_pushButtonLoad_clicked)
         
-        self.pushButtonWrite = QPushButton(self)
+        self.pushButtonWrite = QPushButton()
         self.pushButtonWrite.setText("Update Csv File!")
+        self.pushButtonWrite.setStyleSheet(button_disabled_stylesheet)
         self.pushButtonWrite.setDisabled(True)
         self.pushButtonWrite.clicked.connect(self.on_pushButtonWrite_clicked)
         csvButtonLayout.addWidget(self.pushButtonLoad)
         csvButtonLayout.addWidget(self.pushButtonWrite)
 
         page_change_ButtonLayout = QHBoxLayout()
-        self.pushButtonLoad = QPushButton(self)
-        self.pushButtonLoad.setText("Previous Page")
-        self.pushButtonLoad.clicked.connect(self.on_pushButtonlast_clicked)
+        self.pushButtonPrev = QPushButton()
+        self.pushButtonPrev.setText("Previous Page")
+        self.pushButtonPrev.setStyleSheet(button_stylesheet)
+        self.pushButtonPrev.clicked.connect(self.on_pushButtonlast_clicked)
+        page_change_ButtonLayout.addWidget(self.pushButtonPrev)
         
-        self.pushButtonWrite = QPushButton(self)
-        self.pushButtonWrite.setText("Evaluate")
-        self.pushButtonWrite.clicked.connect(self.on_pushButtonnext_clicked)
-        page_change_ButtonLayout.addWidget(self.pushButtonLoad)
-        page_change_ButtonLayout.addWidget(self.pushButtonWrite)
+        self.pushButtonEval = QPushButton()
+        self.pushButtonEval.setText("Evaluate")
+        self.pushButtonEval.setStyleSheet(button_stylesheet)
+        self.pushButtonEval.clicked.connect(self.on_pushButtonnext_clicked)
+        page_change_ButtonLayout.addWidget(self.pushButtonEval)
 
-        self.layoutVertical = QVBoxLayout(self)
-        self.layoutVertical.addWidget(self.page_1_heading)
         self.layoutVertical.addLayout(wellRadiusLayout)
         self.layoutVertical.addLayout(pumpingRateLayout)
         self.layoutVertical.addWidget(self.tableView)
         self.layoutVertical.addLayout(csvButtonLayout)
         self.layoutVertical.addLayout(page_change_ButtonLayout)
         
+        self.setLayout(self.layoutVertical)
 
     def getFile(self):
         try:
             fileName = QFileDialog.getOpenFileName(filter = "csv (*.csv)")[0]
             payload.filePath=fileName
+            self.fileName = fileName
             self.loadCsv(fileName)
         except:
             print("Ok")
@@ -419,6 +429,8 @@ class Screen3(QWidget):
     @pyqtSlot()
     def on_pushButtonLoad_clicked(self):
         self.getFile()
+        self.pushButtonWrite.setDisabled(False)
+        self.pushButtonWrite.setStyleSheet(button_stylesheet)
 
     @pyqtSlot()
     def on_pushButtonlast_clicked(self):
@@ -485,6 +497,7 @@ widget.setStyleSheet("""
     background-color: white;
     color: black;
 """)
+widget.setFixedSize(600,600)
 widget.setWindowFlags(Qt.WindowType.CustomizeWindowHint | Qt.WindowType.WindowCloseButtonHint | Qt.WindowType.WindowMinimizeButtonHint)
 
 widget.addWidget(screen1)
