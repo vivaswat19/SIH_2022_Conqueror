@@ -22,26 +22,6 @@ class connector:
         self.r = 0
     def getValues(self):
         return self.aquifer.S,self.aquifer.T
-    def setValues(self,dict):
-        self.t1=dict['T1']
-        self.t2=dict['T2']
-        self.t3=dict['T3']
-        self.t4=dict['T4']
-        self.t5=dict['T5']
-        self.t6=dict['T6']
-        self.K=dict['K']
-        self.Ss=dict['Ss']
-        self.Sy=dict['Sy']
-        self.b=dict['b']
-        self.bc=dict['bc']
-        self.Kc=dict['Kc']
-        self.Ssc=dict['Ssc']
-        self.filepath= None
-        self.theis = None
-        self.hantush = None
-        self.shortStor =   None
-        self.numericWaterTable = None 
-        self.filePath=dict['filepath']    
 
     def setValues(self): 
         output_file = open('aquifer.txt','w')
