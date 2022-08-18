@@ -393,8 +393,10 @@ class Screen3(QWidget):
     def last(self):
         widget.setCurrentIndex(widget.currentIndex() - 1) 
     def next(Self):
+        payload.setValues()
+
         # widget.setCurrentIndex(widget.currentIndex() + 1)
-        print(vars(payload))
+        # print(vars(payload))
 
     @pyqtSlot()
     def on_pushButtonWrite_clicked(self):
@@ -411,6 +413,8 @@ class Screen3(QWidget):
     @pyqtSlot()
     def on_pushButtonnext_clicked(self):
         self.next()
+
+
 
 
 app = QApplication(sys.argv)

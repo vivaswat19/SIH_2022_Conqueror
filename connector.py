@@ -20,26 +20,26 @@ class connector:
         self.data=None
     def getValues(self):
         return self.aquifer.S,self.aquifer.T
-    def setValues(self,dict):
-        self.t1=dict['T1']
-        self.t2=dict['T2']
-        self.t3=dict['T3']
-        self.t4=dict['T4']
-        self.t5=dict['T5']
-        self.t6=dict['T6']
-        self.K=dict['K']
-        self.Ss=dict['Ss']
-        self.Sy=dict['Sy']
-        self.b=dict['b']
-        self.bc=dict['bc']
-        self.Kc=dict['Kc']
-        self.Ssc=dict['Ssc']
-        self.filepath= None
+    def setValues(self):
+        # self.t1=dict['T1']
+        # self.t2=dict['T2']
+        # self.t3=dict['T3']
+        # self.t4=dict['T4']
+        # self.t5=dict['T5']
+        # self.t6=dict['T6']
+        # self.K=dict['K']
+        # self.Ss=dict['Ss']
+        # self.Sy=dict['Sy']
+        # self.b=dict['b']
+        # self.bc=dict['bc']
+        # self.Kc=dict['Kc']
+        # self.Ssc=dict['Ssc']
+        # self.filepath= None
         self.theis = None
         self.hantush = None
         self.shortStor =   None
         self.numericWaterTable = None 
-        self.filePath=dict['filepath']    
+        # self.filePath=dict['filepath']    
 
         output_file = open('aquifer.txt','w')
         output_file.writelines(['K', '\t', str(self.K),'\n'])
@@ -51,7 +51,7 @@ class connector:
         output_file.writelines(['Ssc', '\t', str(self.Ssc), '\n'])
         output_file.close()
 
-        self.data=self.DataSet()
+        self.data=DataSet()
         self.well=self.Well(self.data.t.min(), self.data.t.max(),self.filePath)
         self.data.setTr2Array(self.well.r)
         self.aquifer=self.Aquifer()

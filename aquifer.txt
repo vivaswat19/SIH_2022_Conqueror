@@ -1,0 +1,7 @@
+K	1
+Ss	2
+Sy	3
+b	4
+bc	
+Kc	
+Ssc	
