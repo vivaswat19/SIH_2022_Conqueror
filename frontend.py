@@ -431,7 +431,6 @@ class Screen4(QWidget):
 
         layout = QHBoxLayout()
         data_container = QVBoxLayout()
-
         self.cb = QComboBox()
 
         obs_container = QVBoxLayout()
@@ -504,9 +503,12 @@ class Screen4(QWidget):
                 x,y = payload.graph6()
         except:
             print("Graph not found!")
-        
         self.figure.clear()
         ax = self.figure.add_subplot(111)
+        plt.title("placeholder")
+        plt.xlabel("x")
+        plt.ylabel("y")
+
         for i in range(len(x)):
             ax.plot(x[i],y[i])
         
