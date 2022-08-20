@@ -439,9 +439,9 @@ class Screen4(QWidget):
         data_container.addWidget(self.s_output)
         data_container.addWidget(self.t_output)
         self.canvas = FigureCanvas(plt.figure(figsize=(5, 3)))
+        data_container1.addWidget(NavigationToolbar(self.canvas, self))
         data_container1.addWidget(self.canvas)
         
-        data_container1.addWidget(NavigationToolbar(self.canvas, self))
         layout.addLayout(data_container1)
         layout.addLayout(data_container)
 
