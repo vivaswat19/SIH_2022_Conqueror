@@ -8,6 +8,7 @@ from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
 from connector import *
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from styles import *
 
 payload = connector()
@@ -428,6 +429,7 @@ class Screen4(QWidget):
 
         layout = QHBoxLayout()
         data_container = QVBoxLayout()
+        data_container1 = QVBoxLayout()
 
         self.cb = QComboBox()
         data_container.addWidget(self.cb)
@@ -436,12 +438,11 @@ class Screen4(QWidget):
         self.t_output = QLabel()
         data_container.addWidget(self.s_output)
         data_container.addWidget(self.t_output)
-
-
-        self.figure = plt.figure(dpi=200)
-        self.canvas = FigureCanvas(self.figure)
-        layout.addWidget(self.canvas)
-
+        self.canvas = FigureCanvas(plt.figure(figsize=(5, 3)))
+        data_container1.addWidget(self.canvas)
+        
+        data_container1.addWidget(NavigationToolbar(self.canvas, self))
+        layout.addLayout(data_container1)
         layout.addLayout(data_container)
 
         self.setLayout(layout)
@@ -470,8 +471,7 @@ class Screen4(QWidget):
         except:
             print("Graph not found!")
         
-        self.figure.clear()
-        ax = self.figure.add_subplot(111)
+        ax = self.canvas.figure.subplots()
         for i in range(len(x)):
             ax.plot(x[i],y[i])
         
@@ -490,8 +490,8 @@ widget.setStyleSheet("""
     background-color: white;
     color: black;
 """)
-widget.setFixedSize(800,600)
-widget.setWindowFlags(Qt.WindowType.CustomizeWindowHint | Qt.WindowType.WindowCloseButtonHint | Qt.WindowType.WindowMinimizeButtonHint)
+# widget.setFixedSize(800,600)
+# widget.setWindowFlags(Qt.WindowType.CustomizeWindowHint | Qt.WindowType.WindowCloseButtonHint | Qt.WindowType.WindowMinimizeButtonHint)
 
 widget.addWidget(screen1)
 widget.addWidget(screen2)
