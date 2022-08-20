@@ -1,5 +1,5 @@
 K	1
-Ss	11
+Ss	1
 Sy	1
 b	1
 bc	1

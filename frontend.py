@@ -8,8 +8,11 @@ from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
 from connector import *
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from styles import *
 
+
+plt.rcParams.update({'font.size': 5, 'font.weight': 500})
 payload = connector()
 
 class Screen1(QWidget):
@@ -428,20 +431,51 @@ class Screen4(QWidget):
 
         layout = QHBoxLayout()
         data_container = QVBoxLayout()
-
         self.cb = QComboBox()
-        data_container.addWidget(self.cb)
 
+        obs_container = QVBoxLayout()
+        obs_container.addWidget(QLabel("Obs. Wells"))        
+
+        self.s_label = QLabel("S")
         self.s_output = QLabel()
+        self.t_label = QLabel("T")
         self.t_output = QLabel()
-        data_container.addWidget(self.s_output)
-        data_container.addWidget(self.t_output)
+        self.kz_kr_label = QLabel("Kz/Kr")
+        self.kz_kr_output = QLabel()
+        self.b_label = QLabel("b")
+        self.b_output = QLabel()
 
+        param_container = QVBoxLayout()
+        param_container.addWidget(QLabel("Parameters"))
+        s_container = QHBoxLayout()
+        s_container.addWidget(self.s_label)
+        s_container.addWidget(self.s_output)
+        param_container.addLayout(s_container)
 
-        self.figure = plt.figure(dpi=200)
+        t_container = QHBoxLayout()
+        t_container.addWidget(self.t_label)
+        t_container.addWidget(self.t_output)
+        param_container.addLayout(t_container)
+
+        kz_kr_container = QHBoxLayout()
+        kz_kr_container.addWidget(self.kz_kr_label)
+        kz_kr_container.addWidget(self.kz_kr_output)
+        param_container.addLayout(kz_kr_container)
+
+        b_container = QHBoxLayout()
+        b_container.addWidget(self.b_label)
+        b_container.addWidget(self.b_output)
+        param_container.addLayout(b_container)
+
+        data_container.addStretch(1)
+        data_container.addWidget(self.cb)
+        data_container.addLayout(obs_container)
+        data_container.addLayout(param_container)
+        data_container.addStretch(1)
+
+        self.figure, self.axes = plt.subplots(1, 1, constrained_layout=True, figsize=(3.2, 1))
         self.canvas = FigureCanvas(self.figure)
         layout.addWidget(self.canvas)
-
         layout.addLayout(data_container)
 
         self.setLayout(layout)
@@ -469,9 +503,11 @@ class Screen4(QWidget):
                 x,y = payload.graph6()
         except:
             print("Graph not found!")
-        
         self.figure.clear()
         ax = self.figure.add_subplot(111)
+        plt.title("placeholder")
+        plt.xlabel("x")
+        plt.ylabel("y")
         for i in range(len(x)):
             ax.plot(x[i],y[i])
         
@@ -490,7 +526,7 @@ widget.setStyleSheet("""
     background-color: white;
     color: black;
 """)
-widget.setFixedSize(800,600)
+widget.setFixedSize(900,600)
 widget.setWindowFlags(Qt.WindowType.CustomizeWindowHint | Qt.WindowType.WindowCloseButtonHint | Qt.WindowType.WindowMinimizeButtonHint)
 
 widget.addWidget(screen1)

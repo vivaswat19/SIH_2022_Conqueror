@@ -1,25 +1,25 @@
 from Backend import *
 class connector:
     def __init__(self):
-        self.t1=False
+        self.t1=True
         self.t2=False
         self.t3=False
         self.t4=False
         self.t5=False
         self.t6=False
-        self.K=0
-        self.Ss=0
-        self.Sy=0
-        self.b=0
-        self.bc=0
-        self.Kc=0
-        self.Ssc=0
-        self.filePath=""
+        self.K=1
+        self.Ss=1
+        self.Sy=1
+        self.b=1
+        self.bc=1
+        self.Kc=1
+        self.Ssc=1
+        self.filePath="/Users/vivaswatsinha/Github/sih_2022/transducer.csv"
         self.aquifer=None
         self.well=None
         self.data=None
-        self.q = 0
-        self.r = 0
+        self.q = 1
+        self.r = 1
     def getValues(self):
         return self.aquifer.S,self.aquifer.T
 
