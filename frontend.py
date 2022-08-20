@@ -10,7 +10,9 @@ from connector import *
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from styles import *
+from screeninfo import get_monitors
 
+screen_size = (get_monitors()[0].width * get_monitors()[0].height)/(1440*900)
 
 plt.rcParams.update({'font.size': 5, 'font.weight': 500})
 payload = connector()
@@ -473,7 +475,7 @@ class Screen4(QWidget):
         data_container.addLayout(param_container)
         data_container.addStretch(1)
 
-        self.figure, self.axes = plt.subplots(1, 1, constrained_layout=True, figsize=(3.2, 1))
+        self.figure, self.axes = plt.subplots(1, 1, constrained_layout=True, figsize=(3.5*screen_size, 1))
         self.canvas = FigureCanvas(self.figure)
         layout.addWidget(self.canvas)
         layout.addLayout(data_container)
@@ -528,6 +530,7 @@ widget.setStyleSheet("""
     color: black;
 """)
 widget.setFixedSize(900,600)
+
 widget.setWindowFlags(Qt.WindowType.CustomizeWindowHint | Qt.WindowType.WindowCloseButtonHint | Qt.WindowType.WindowMinimizeButtonHint)
 
 
