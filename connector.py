@@ -1,7 +1,7 @@
 from Backend import *
 class connector:
     def __init__(self):
-        self.t1=True
+        self.t1=False
         self.t2=False
         self.t3=False
         self.t4=False
@@ -85,9 +85,6 @@ class connector:
         #composite graph
         xValues=[]
         yValues=[]
-
-        xValues.append(self.data.tr2)
-        yValues.append(self.data.s)
         if self.t1:
             xValues.append(self.well.tr2Array)
             yValues.append(self.theis.Drawdown(0,2))

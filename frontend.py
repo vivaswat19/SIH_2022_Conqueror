@@ -1,3 +1,4 @@
+from cProfile import label
 import sys
 import csv
 import matplotlib.pyplot as plt
@@ -269,19 +270,6 @@ class Screen2(QWidget):
         payload.t5 = self.checkBox_t5.isChecked()
         payload.t6 = self.checkBox_t6.isChecked()
 
-        if(self.checkBox_t1.isChecked()):
-            screen4.cb.addItem(self.checkBox_t1.text())
-        if(self.checkBox_t2.isChecked()):
-            screen4.cb.addItem(self.checkBox_t2.text())
-        if(self.checkBox_t3.isChecked()):
-            screen4.cb.addItem(self.checkBox_t3.text())
-        if(self.checkBox_t4.isChecked()):
-            screen4.cb.addItem(self.checkBox_t4.text())
-        if(self.checkBox_t5.isChecked()):
-            screen4.cb.addItem(self.checkBox_t5.text())
-        if(self.checkBox_t6.isChecked()):
-            screen4.cb.addItem(self.checkBox_t6.text())
-
         widget.setCurrentIndex(widget.currentIndex() + 1)  
     
     def screen_1(self):
@@ -434,6 +422,9 @@ class Screen4(QWidget):
         layout = QHBoxLayout()
         data_container = QVBoxLayout()
         self.cb = QComboBox()
+        self.cb.addItem("Drawdown-Time")
+        self.cb.addItem("Composite")
+        self.cb.addItem("Drawdown-Distance")
 
         obs_container = QVBoxLayout()
         obs_container.addWidget(QLabel("Obs. Wells"))        
@@ -486,34 +477,62 @@ class Screen4(QWidget):
         (s,t) = payload.getValues()
         self.s_output.setText(str(s))
         self.t_output.setText(str(t))
+        self.kz_kr_output.setText(str(0))
+        self.b_output.setText(str(payload.b))
 
     def selection_Change(self,index=0):
         x=[]
         y=[]
+        x_label = ""
+        y_label = ""
         try:
-            if(self.cb.itemText(index) == "Confined (Thesis)"):
+            if(self.cb.itemText(index) == "Drawdown-Time"):
                 x,y = payload.graph1()
-            elif(self.cb.itemText(index) == "Confined (Wellborn storage; numerical)"):
+                x_label = "Time"
+                y_label = "Drawdown"
+            elif(self.cb.itemText(index) == "Composite"):
                 x,y = payload.graph2()
-            elif(self.cb.itemText(index) == "Leaky (Hantush and Jacob)"):
+                x_label = "T/R²"
+                y_label = "Drawdown"
+            elif(self.cb.itemText(index) == "Drawdown-Distance"):
                 x,y = payload.graph3()
-            elif(self.cb.itemText(index) == "Leaky (Hantush, 1960; short-term; aquitard storage)"):
-                x,y = payload.graph4()
-            elif(self.cb.itemText(index) == "Unconfined (Thesis, using Sy)"):
-                x,y = payload.graph5()
-            elif(self.cb.itemText(index) == "Unconfined (Dupuit; wellborn storage; numerical)"):
-                x,y = payload.graph6()
+                x_label = "Distance"
+                y_label = "Drawdown"
         except:
             print("Graph not found!")
         self.figure.clear()
         ax = self.figure.add_subplot(111)
         plt.title("placeholder")
-        plt.xlabel("x")
-        plt.ylabel("y")
+        plt.xlabel(x_label)
+        plt.ylabel(y_label)
+        plt.xscale("log")
+        plt.yscale("log")
 
-        for i in range(len(x)):
-            ax.plot(x[i],y[i])
+        legend = []
+
+        if payload.t1:
+            legend.append("Confined (Thesis)")
+        if payload.t2:
+            legend.append("Confined (Wellborn storage; numerical)")
+        if payload.t3:
+            legend.append("Leaky (Hantush and Jacob)")
+        if payload.t4:
+            legend.append("Leaky (Hantush, 1960; short-term; aquitard storage)")
+        if payload.t5:
+            legend.append("Unconfined (Thesis, using Sy)")
+        if payload.t6:
+            legend.append("Unconfined (Dupuit; wellborn storage; numerical)")
+
+        start = 0
+        if(self.cb.itemText(index) == "Drawdown-Time"):
+            ax.scatter(x[0],y[0],label="Orinal data")
+            start=1
         
+
+        for i in range(start,len(x)):
+            ax.plot(x[i],y[i],label=legend[i-start])
+        
+        plt.legend()
         self.canvas.draw()
 
 
