@@ -525,7 +525,7 @@ class Screen4(QWidget):
 
         start = 0
         if(self.cb.itemText(index) == "Drawdown-Time"):
-            ax.scatter(x[0],y[0],label="Orinal data")
+            ax.scatter(x[0],y[0],label="Original data")
             start=1
         
 
