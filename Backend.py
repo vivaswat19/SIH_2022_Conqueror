@@ -5,6 +5,10 @@ from scipy.integrate import quad
 from scipy.integrate import odeint
 from scipy.special import *
 import sys
+import pickle
+from sklearn.linear_model import LogisticRegression
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
 
 class DataSet:
     
@@ -70,7 +74,39 @@ class Well:
         output_file.writelines(['Q', '\t', str(self.Q),'\n'])
         output_file.close()     
 
-        
+class MLModel:
+    def __init__(self,t,s,K,Sy,b,r,Q):
+        pkl_filename="pickle_model.pkl"
+        hydr_cond=[]
+        sp_yield=[]
+        aq_th=[]
+        rd_dis=[]
+        rate=[]
+
+        for i in range(0,len(t)):
+            hydr_cond.append(K)
+            sp_yield.append(s)
+            aq_th.append(b)
+            rd_dis.append(r)
+            rate.append(Q)
+        hydr_cond=np.array(hydr_cond)
+        sp_yield=np.array(sp_yield)
+        aq_th=np.array(aq_th)
+        rd_dis=np.array(rd_dis)
+        rate=np.array(rate)
+        s=np.array(s)
+        t=np.array(t)
+
+        values=pd.DataFrame({'K': hydr_cond, 'Sy': sp_yield,'b':aq_th,'r':rd_dis,'Q':rate,'time':t,'drawdown':s}, columns=['K', 'Sy','b','r','Q','time','drawdown'])
+        with open(pkl_filename, 'rb') as file:
+            self.pickle_model = pickle.load(file)
+        self.variables = values[['K','Sy','b','r','Q','time']].to_numpy()
+        self.poly = PolynomialFeatures(degree=3)
+        self.poly_variables = poly.fit_transform(variables)
+        self.spred=pickle_model.predict(poly_variables)
+    def Drawdown(self):
+        return self.spred
+
 class Hantush:            # Hantush and Jacob (1955) solution
 
     def __init__(self, aquifer, well):

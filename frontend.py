@@ -245,6 +245,13 @@ class Screen2(QWidget):
         checkbox_row6.addWidget(self.checkBox_t6)
         layout.addLayout(checkbox_row6)
 
+        self.checkBox_t7 = QCheckBox(self)
+        self.checkBox_t7.setText("ML Model")
+        self.checkBox_t7.setStyleSheet(label_stylesheet)
+        checkbox_row7 = QHBoxLayout() 
+        checkbox_row7.addWidget(self.checkBox_t7)
+        layout.addLayout(checkbox_row7)
+
         button_row_layout = QHBoxLayout()
 
         self.last = QPushButton(text="Previous Page")
@@ -269,6 +276,7 @@ class Screen2(QWidget):
         payload.t4 = self.checkBox_t4.isChecked()
         payload.t5 = self.checkBox_t5.isChecked()
         payload.t6 = self.checkBox_t6.isChecked()
+        payload.t7 = self.checkBox_t7.isChecked()
 
         widget.setCurrentIndex(widget.currentIndex() + 1)  
     
@@ -525,7 +533,7 @@ class Screen4(QWidget):
 
         start = 0
         if(self.cb.itemText(index) == "Drawdown-Time"):
-            ax.scatter(x[0],y[0],label="Original data")
+            ax.scatter(x[0],y[0],label="Orinal data")
             start=1
         
 
