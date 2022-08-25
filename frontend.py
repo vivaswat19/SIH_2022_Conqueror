@@ -1,9 +1,7 @@
-from cProfile import label
 import sys
 import csv
 import matplotlib.pyplot as plt
-
-
+import os
 from PyQt6.QtCore import *
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
@@ -12,6 +10,8 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from styles import *
 from screeninfo import get_monitors
+
+os.environ['QT_IMAGEIO_MAXALLOC'] = "10000"
 
 screen_size = (get_monitors()[0].width * get_monitors()[0].height)/(1440*900)
 
@@ -28,13 +28,7 @@ class Screen1(QWidget):
         # Main Page Heading
         self.page_1_heading = QLabel("Hydraulic Properties",self)
         self.page_1_heading.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.page_1_heading.setStyleSheet("""
-            QWidget {
-                font: bold 40px;
-                padding: 20px;
-                max-height: 50px;
-            }
-        """)
+        self.page_1_heading.setStyleSheet(heading_stylesheet)
         layout.addWidget(self.page_1_heading)
 
         # Aquifer Hydraulic Conductivity Widget
@@ -191,13 +185,7 @@ class Screen2(QWidget):
         # Main Page Heading
         self.page_2_heading = QLabel("Select Testing Model",self)
         self.page_2_heading.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.page_2_heading.setStyleSheet("""
-            QWidget {
-                font: bold 40px;
-                padding: 20px;
-                max-height: 50px;
-            }
-        """)
+        self.page_2_heading.setStyleSheet(heading_stylesheet)
         layout.addWidget(self.page_2_heading)
 
 
@@ -281,13 +269,7 @@ class Screen3(QWidget):
         self.layoutVertical = QVBoxLayout()
 
         self.page_3_heading = QLabel("DrawDown Data")
-        self.page_3_heading.setStyleSheet("""
-            QWidget {
-                font: bold 40px;
-                padding: 20px;
-                max-height: 50px;
-            }
-        """)
+        self.page_3_heading.setStyleSheet(heading_stylesheet)
         self.page_3_heading.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.layoutVertical.addWidget(self.page_3_heading)
 
@@ -540,9 +522,19 @@ class Screen4(QWidget):
         plt.legend()
         self.canvas.draw()
 
+class Error_screen(QWidget):
+    def __init__(self):
+       super(Error_screen, self).__init__()
+       self.error = "";
+       layout = QVBoxLayout()
+       heading = QLabel("Error Encountered!")
+       heading.setStyleSheet(heading_stylesheet)
+       layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+       layout.addWidget(heading)
 
 
 app = QApplication(sys.argv)
+error_screen = Error_screen()
 screen1 = Screen1()
 screen2 = Screen2()
 screen3 = Screen3()
@@ -562,5 +554,6 @@ widget.addWidget(screen1)
 widget.addWidget(screen2)
 widget.addWidget(screen3)
 widget.addWidget(screen4)
+widget.addWidget(error_screen)
 widget.show()
 app.exec()

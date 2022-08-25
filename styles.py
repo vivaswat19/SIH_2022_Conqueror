@@ -1,4 +1,10 @@
-
+heading_stylesheet = """
+    QWidget {
+        font: bold 40px;
+        padding: 20px;
+        max-height: 50px;
+    }
+"""
 label_stylesheet = """
     QWidget {
         font: 20px;
