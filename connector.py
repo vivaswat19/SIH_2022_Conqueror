@@ -7,19 +7,19 @@ class connector:
         self.t4=False
         self.t5=False
         self.t6=False
-        self.K=1
-        self.Ss=1
-        self.Sy=1
-        self.b=1
-        self.bc=1
-        self.Kc=1
-        self.Ssc=1
+        self.K=2.5
+        self.Ss=1e-05   
+        self.Sy=0.15
+        self.b=7
+        self.bc=3
+        self.Kc=0.05
+        self.Ssc=0.0001
         self.filePath="/Users/vivaswatsinha/Github/sih_2022/transducer.csv"
         self.aquifer=None
         self.well=None
         self.data=None
-        self.q = 1
-        self.r = 1
+        self.r = 0.076
+        self.q = -27.255
     def getValues(self):
         return self.aquifer.S,self.aquifer.T
 
@@ -42,6 +42,7 @@ class connector:
 
 
         self.data=DataSet(self.filePath)
+        self.model = MLModel(self.data.s,self.data.t, self.K, self.Sy, self.b, self.r, self.q);
         self.well=Well(self.data.t.min(), self.data.t.max())
         self.data.setTr2Array(self.well.r)
         self.aquifer=Aquifer()
@@ -52,6 +53,17 @@ class connector:
         self.shortStor = ShortStorage(self.aquifer, self.well)    
         self.numericWaterTable = MOL(self.aquifer, self.well)    
 
+    def mlgraph(self):
+        print("s-array")
+        for i in self.data.s:
+            print(i)
+        print("t-array")
+        for i in self.data.t:
+            print(i)
+        ans = self.model.Drawdown()
+        for i in ans:
+            print(i)
+        return self.data.t,ans
 
     def graph1(self):
         #drawdown-time graph

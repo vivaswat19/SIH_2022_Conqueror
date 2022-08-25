@@ -6,6 +6,7 @@ label_stylesheet = """
         padding-left: 0px;
         padding-right: 5px;
         padding-bottom: 10px;
+        min-height:35px;
     }
 """
 
@@ -15,6 +16,9 @@ line_edit_stylesheet = """
         font: italic 20px;
         min-width: 150px;
         max-width: 200px;
+        min-height:35px;
+        border: 1px solid red;
+        box-shadow: 10px 10px;
     }
 """
 
@@ -31,7 +35,7 @@ button_disabled_stylesheet = """
         font: bold 20px;
         min-width: 225;
         max-width: 250;
-        background-color: rgb(69, 69, 69);
+        background-color: rgb(107, 107, 107);
         color: white;
     }
 """
