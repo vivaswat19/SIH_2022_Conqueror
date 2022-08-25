@@ -8,9 +8,11 @@ from scipy.special import *
 import sys
 import pickle
 from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import LinearRegression
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import PolynomialFeatures
+from scipy.optimize import curve_fit
 
 class DataSet:
     
@@ -112,6 +114,65 @@ class MLModel:
     def Drawdown(self):
         return self.spred
 
+class CooperJacob:
+    def __init__(self, df):
+        self.s=df['S'].to_numpy()
+        self.t=df['T'].to_numpy()
+        self.Q=27.255
+        self.r=0.076
+    
+    def Values(self):
+        reg = LinearRegression().fit(self.t.reshape(-1,1), self.s)
+        score=reg.score(self.t.reshape(-1, 1), self.s)
+        print(score)
+        delta_s=reg.predict([[100]])-reg.predict([[10]])
+        T=2.303*self.Q/4*np.pi*delta_s
+        S=2.25*T*reg.predict([[0]])/self.r**2
+        
+        smodel=reg.predict(self.t.reshape(-1,1))
+        
+        return self.t,smodel,self.t,self.s,T,S
+
+class Theis:
+    def __init__(self, df):
+        self.s=df['S'].to_numpy()
+        self.t=df['T'].to_numpy()
+    
+    def Values(self):
+        Times = self.t
+        sobs = self.s # Drawdown from second column
+        init_vals = [1, 0.00001] # for [T & S values]
+        best_vals, covar = curve_fit(self.myfunc, Times, sobs, p0=init_vals, bounds=([0.01, 0.000001], [100000, 0.1]), method = 'trf')
+        stdevs = np.sqrt(np.diag(covar)) 
+        T = best_vals[0]
+        S = best_vals[1] 
+        smodel=self.myfunc(Times,T,S) 
+        
+        return Times,smodel,Times,sobs,T,S
+    
+    def wufunc(self, r,S,T,t):
+        u = (r**2)*S/(4*T*t) 
+        Wu=-0.5772-np.log(u)+u 
+        ntrm = 30
+        for i in range (2, ntrm+1):
+            sign = (-1)**(i-1)
+            factval = float(m.factorial(i))
+            Wu = Wu + sign*(u**i)/(i*factval)
+        return (Wu) 
+
+
+    def myfunc(self, tt, T, S):
+        pi = 3.14
+        Q = 1199.22 #m3/d
+        r = 251.155  #m
+        nrow = len(tt)
+        n = nrow 
+        drawdown=np.zeros((n),float) 
+        for i in range (0,n):
+            Wu_val=self.wufunc(r,S,T,tt[i])
+            drawdown[i] = Q*Wu_val/(4*pi*T) #End loop i
+        return (drawdown)
+
 class Hantush:            # Hantush and Jacob (1955) solution
 
     def __init__(self, aquifer, well):
@@ -193,52 +254,52 @@ class ShortStorage:            # Hantush (1960) solution for leaky aquifer with 
         return s        
 
         
-class Theis:    # Theis (1935) solution
+# class Theis:    # Theis (1935) solution
 
-    def __init__(self, aquifer, well):
-        self.aquifer = aquifer
-        self.well = well
+#     def __init__(self, aquifer, well):
+#         self.aquifer = aquifer
+#         self.well = well
         
-    def W(self, u):
-        # Theis well function
-        return expn(1, u)        
+#     def W(self, u):
+#         # Theis well function
+#         return expn(1, u)        
 
-    def Drawdown(self, mode,flag):
-        if flag == 0:
-            s = zeros(len(self.well.tArray), float)
-        elif flag == 1:
-            s = zeros(len(self.well.rArray), float)
-        else:
-            s = zeros(len(self.well.tr2Array), float)
-        if flag==0:
-            if mode == 0:       # confined aquifer
-                for i, t in enumerate(self.well.tArray):    
-                    u = self.well.r**2 * self.aquifer.Ss/(4*self.aquifer.K*t)
-                    s[i] = -self.well.Q/(4*pi*self.aquifer.K*self.aquifer.b) * self.W(u)
-            else:               # unconfined aquifer (assuming ~ constant saturated thickness)
-                for i, t in enumerate(self.well.tArray):    
-                    u = self.well.r**2 * self.aquifer.Sy/(4*self.aquifer.K*self.aquifer.b*t)
-                    s[i] = -self.well.Q/(4*pi*self.aquifer.K*self.aquifer.b) * self.W(u)      
-        elif flag == 1:
-            if mode == 0:
-                for i,r in enumerate(self.well.rArray):
-                    u = r**2 * self.aquifer.Ss/(4*self.aquifer.K*self.well.tArray[1])
-                    s[i] = -self.well.Q/(4*pi*self.aquifer.K*self.aquifer.b) * self.W(u)
-            else:
-                for i, r in enumerate(self.well.rArray):    
-                    u = r**2 * self.aquifer.Sy/(4*self.aquifer.K*self.aquifer.b*self.well.tArray[1])
-                    s[i] = -self.well.Q/(4*pi*self.aquifer.K*self.aquifer.b) * self.W(u)
-        elif flag==2:
-            if mode == 0:
-                for i,tr2 in enumerate(self.well.tr2Array):
-                    u = self.aquifer.Ss/(4*self.aquifer.K*tr2)
-                    s[i] = -self.well.Q/(4*pi*self.aquifer.K*self.aquifer.b) * self.W(u)
-            else:
-                for i,tr2 in enumerate(self.well.tr2Array):
-                    u = self.aquifer.Sy/(4*self.aquifer.K*self.aquifer.b*tr2)
-                    s[i] = -self.well.Q/(4*pi*self.aquifer.K*self.aquifer.b) * self.W(u)
+#     def Drawdown(self, mode,flag):
+#         if flag == 0:
+#             s = zeros(len(self.well.tArray), float)
+#         elif flag == 1:
+#             s = zeros(len(self.well.rArray), float)
+#         else:
+#             s = zeros(len(self.well.tr2Array), float)
+#         if flag==0:
+#             if mode == 0:       # confined aquifer
+#                 for i, t in enumerate(self.well.tArray):    
+#                     u = self.well.r**2 * self.aquifer.Ss/(4*self.aquifer.K*t)
+#                     s[i] = -self.well.Q/(4*pi*self.aquifer.K*self.aquifer.b) * self.W(u)
+#             else:               # unconfined aquifer (assuming ~ constant saturated thickness)
+#                 for i, t in enumerate(self.well.tArray):    
+#                     u = self.well.r**2 * self.aquifer.Sy/(4*self.aquifer.K*self.aquifer.b*t)
+#                     s[i] = -self.well.Q/(4*pi*self.aquifer.K*self.aquifer.b) * self.W(u)      
+#         elif flag == 1:
+#             if mode == 0:
+#                 for i,r in enumerate(self.well.rArray):
+#                     u = r**2 * self.aquifer.Ss/(4*self.aquifer.K*self.well.tArray[1])
+#                     s[i] = -self.well.Q/(4*pi*self.aquifer.K*self.aquifer.b) * self.W(u)
+#             else:
+#                 for i, r in enumerate(self.well.rArray):    
+#                     u = r**2 * self.aquifer.Sy/(4*self.aquifer.K*self.aquifer.b*self.well.tArray[1])
+#                     s[i] = -self.well.Q/(4*pi*self.aquifer.K*self.aquifer.b) * self.W(u)
+#         elif flag==2:
+#             if mode == 0:
+#                 for i,tr2 in enumerate(self.well.tr2Array):
+#                     u = self.aquifer.Ss/(4*self.aquifer.K*tr2)
+#                     s[i] = -self.well.Q/(4*pi*self.aquifer.K*self.aquifer.b) * self.W(u)
+#             else:
+#                 for i,tr2 in enumerate(self.well.tr2Array):
+#                     u = self.aquifer.Sy/(4*self.aquifer.K*self.aquifer.b*tr2)
+#                     s[i] = -self.well.Q/(4*pi*self.aquifer.K*self.aquifer.b) * self.W(u)
 
-        return s
+#         return s
        
 
 class MOL:  # numerical (method-of-lines) solution for an unconfined aquifer

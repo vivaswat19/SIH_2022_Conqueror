@@ -18,7 +18,6 @@ line_edit_stylesheet = """
         max-width: 200px;
         min-height:35px;
         border: 1px solid red;
-        box-shadow: 10px 10px;
     }
 """
 
