@@ -14,7 +14,7 @@ class connector:
         self.bc=3
         self.Kc=0.05
         self.Ssc=0.0001
-        self.filePath="/Users/vivaswatsinha/Github/sih_2022/transducer.csv"
+        self.filePath="./transducer.csv"
         self.aquifer=None
         self.well=None
         self.data=None
@@ -54,15 +54,7 @@ class connector:
         self.numericWaterTable = MOL(self.aquifer, self.well)    
 
     def mlgraph(self):
-        print("s-array")
-        for i in self.data.s:
-            print(i)
-        print("t-array")
-        for i in self.data.t:
-            print(i)
         ans = self.model.Drawdown()
-        for i in ans:
-            print(i)
         return self.data.t,ans
 
     def graph1(self):

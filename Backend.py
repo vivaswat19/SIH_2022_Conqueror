@@ -28,7 +28,6 @@ class DataSet:
             self.s.append(float(lineInput[i][1]))
         self.t = array(self.t)
         self.s = array(self.s)
-        print('Read test data set.')
     def setTr2Array(self,r):
         for i in self.t:
             self.tr2.append(i/r**2)
@@ -101,14 +100,6 @@ class MLModel:
         rate=np.array(rate)
         t=np.array(t)
         drawdown=np.array(drawdown)
-
-        print("Size1 :",hydr_cond.size)
-        print("Size2 :",sp_yield.size)
-        print("Size3 :",aq_th.size)
-        print("Size4 :",rd_dis.size)
-        print("Size5 :",rate.size)
-        print("Size6 :",t.size)
-        print("Size7 :",drawdown.size)
 
         values=pd.DataFrame({'K': hydr_cond, 'Sy': sp_yield,'b':aq_th,'r':rd_dis,'Q':rate,'time':t,'drawdown':drawdown}, columns=['K', 'Sy','b','r','Q','time','drawdown'])
         with open(pkl_filename, 'rb') as file:
