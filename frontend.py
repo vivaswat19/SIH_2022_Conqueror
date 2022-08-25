@@ -245,13 +245,6 @@ class Screen2(QWidget):
         checkbox_row6.addWidget(self.checkBox_t6)
         layout.addLayout(checkbox_row6)
 
-        self.checkBox_t7 = QCheckBox(self)
-        self.checkBox_t7.setText("ML Model")
-        self.checkBox_t7.setStyleSheet(label_stylesheet)
-        checkbox_row7 = QHBoxLayout() 
-        checkbox_row7.addWidget(self.checkBox_t7)
-        layout.addLayout(checkbox_row7)
-
         button_row_layout = QHBoxLayout()
 
         self.last = QPushButton(text="Previous Page")
@@ -276,7 +269,6 @@ class Screen2(QWidget):
         payload.t4 = self.checkBox_t4.isChecked()
         payload.t5 = self.checkBox_t5.isChecked()
         payload.t6 = self.checkBox_t6.isChecked()
-        payload.t7 = self.checkBox_t7.isChecked()
 
         widget.setCurrentIndex(widget.currentIndex() + 1)  
     
@@ -493,27 +485,27 @@ class Screen4(QWidget):
         y=[]
         x_label = ""
         y_label = ""
-        # try:
-        if(self.cb.itemText(index) == "Drawdown-Time"):
-            x,y = payload.graph1()
-            a,b = payload.mlgraph()
-            x.append(a)
-            y.append(b)
-            x_label = "Time"
-            y_label = "Drawdown"
-        elif(self.cb.itemText(index) == "Composite"):
-            x,y = payload.graph2()
-            x_label = "T/R²"
-            y_label = "Drawdown"
-        elif(self.cb.itemText(index) == "Drawdown-Distance"):
-            x,y = payload.graph3()
-            a,b = payload.mlgraph()
-            x.append(a)
-            y.append(b)
-            x_label = "Distance"
-            y_label = "Drawdown"
-        # except:
-        #     print("Graph not found!")
+        try:
+            if(self.cb.itemText(index) == "Drawdown-Time"):
+                x,y = payload.graph1()
+                a,b = payload.mlgraph()
+                x.append(a)
+                y.append(b)
+                x_label = "Time"
+                y_label = "Drawdown"
+            elif(self.cb.itemText(index) == "Composite"):
+                x,y = payload.graph2()
+                x_label = "T/R²"
+                y_label = "Drawdown"
+            elif(self.cb.itemText(index) == "Drawdown-Distance"):
+                x,y = payload.graph3()
+                # a,b = payload.mlgraph()
+                # x.append(a)
+                # y.append(b)
+                x_label = "Distance"
+                y_label = "Drawdown"
+        except Exception as e:
+            print("Error:",e)
         self.figure.clear()
         ax = self.figure.add_subplot(111)
         plt.title("placeholder")
@@ -536,16 +528,12 @@ class Screen4(QWidget):
             legend.append("Unconfined (Thesis, using Sy)")
         if payload.t6:
             legend.append("Unconfined (Dupuit; wellborn storage; numerical)")
-        if payload.t7:
-            legend.append("ML Model")
+        legend.append("ML Model")
 
         start = 0
         if(self.cb.itemText(index) == "Drawdown-Time"):
             ax.scatter(x[0],y[0],label="Original data")
             start=1
-        
-        print(payload.t7)
-        print(size(x))
         for i in range(start,len(x)):
             ax.plot(x[i],y[i],label=legend[i-start])
 
