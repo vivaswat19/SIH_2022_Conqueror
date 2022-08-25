@@ -148,14 +148,14 @@ class Screen1(QWidget):
         aqfrd_spec_storage_row.addWidget(self.aqfrd_spec_storage_input)
         layout.addLayout(aqfrd_spec_storage_row)
 
-        # Update and Save Button Widget
+        # Save Button Widget
         button_row_layout = QHBoxLayout()
-        self.update_btn = QPushButton(text="Update")
-        self.update_btn.setStyleSheet(button_stylesheet)
-        button_row_layout.addWidget(self.update_btn)
-
         self.save_btn = QPushButton(text="Save")
-        self.save_btn.setStyleSheet(button_stylesheet)
+        self.save_btn.setStyleSheet(button_stylesheet+"""
+            QPushButton {
+                margin-left: 400px
+            }
+        """)
         self.save_btn.clicked.connect(self.screen_2)
         button_row_layout.addWidget(self.save_btn)
         
