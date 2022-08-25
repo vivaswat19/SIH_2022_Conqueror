@@ -356,8 +356,8 @@ class Screen3(QWidget):
             payload.filePath=fileName
             self.fileName = fileName
             self.loadCsv(fileName)
-        except:
-            print("Ok")
+        except Exception as e:
+            print("Error:",e)
 
     def loadCsv(self, fileName):
         with open(fileName, "r") as fileInput:
