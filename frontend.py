@@ -43,7 +43,7 @@ class Screen1(QWidget):
 
         # Aquifer Hydraulic Conductivity Input Widget
         self.aqfr_hydr_cond_input = QLineEdit(self)
-        self.aqfr_hydr_cond_input.setPlaceholderText("0")
+        self.aqfr_hydr_cond_input.setPlaceholderText("Eg: " + str(payload.K))
         self.aqfr_hydr_cond_input.setStyleSheet(line_edit_stylesheet)
 
         # placing Aquifer Hydraulic Conductivity Widget on Screen
@@ -59,7 +59,7 @@ class Screen1(QWidget):
 
         # Aquifer Specific Storage Input Widget
         self.aqfr_spec_storage_input = QLineEdit(self)
-        self.aqfr_spec_storage_input.setPlaceholderText("0")
+        self.aqfr_spec_storage_input.setPlaceholderText("Eg: " + str(payload.Ss))
         self.aqfr_spec_storage_input.setStyleSheet(line_edit_stylesheet)
 
         # placing Aquifer Specific Storage Widget on Screen
@@ -75,7 +75,7 @@ class Screen1(QWidget):
 
         # Aquifer Specific Yield Input Widget
         self.aqfr_spec_yield_input = QLineEdit(self)
-        self.aqfr_spec_yield_input.setPlaceholderText("0")
+        self.aqfr_spec_yield_input.setPlaceholderText("Eg: " + str(payload.Sy))
         self.aqfr_spec_yield_input.setStyleSheet(line_edit_stylesheet)
         
         #Placing Aquifer Specific Yield Widget on Screen
@@ -91,7 +91,7 @@ class Screen1(QWidget):
         
         # Aquifer Thickness Input Widget
         self.aqfr_thickness_input = QLineEdit(self)
-        self.aqfr_thickness_input.setPlaceholderText("0")
+        self.aqfr_thickness_input.setPlaceholderText("Eg: " + str(payload.b))
         self.aqfr_thickness_input.setStyleSheet(line_edit_stylesheet)
 
         # Placing Aquifer thickenss widget on screen
@@ -107,7 +107,7 @@ class Screen1(QWidget):
         
         # Aquitard Thickness Input Widget
         self.aqfrd_thickness_input = QLineEdit(self)
-        self.aqfrd_thickness_input.setPlaceholderText("0")
+        self.aqfrd_thickness_input.setPlaceholderText("Eg: " + str(payload.bc))
         self.aqfrd_thickness_input.setStyleSheet(line_edit_stylesheet)
 
         # Placing Aquitard thickenss widget on screen
@@ -123,7 +123,7 @@ class Screen1(QWidget):
         
         # Aquitard Thickness Input Widget
         self.aqfrd_vert_cond_input = QLineEdit(self)
-        self.aqfrd_vert_cond_input.setPlaceholderText("0")
+        self.aqfrd_vert_cond_input.setPlaceholderText("Eg: " + str(payload.Kc))
         self.aqfrd_vert_cond_input.setStyleSheet(line_edit_stylesheet)
 
         # Placing Aquitard thickenss widget on screen
@@ -139,7 +139,7 @@ class Screen1(QWidget):
         
         # Aquitard Thickness Input Widget
         self.aqfrd_spec_storage_input = QLineEdit(self)
-        self.aqfrd_spec_storage_input.setPlaceholderText("0")
+        self.aqfrd_spec_storage_input.setPlaceholderText("Eg: " + str(payload.Ssc))
         self.aqfrd_spec_storage_input.setStyleSheet(line_edit_stylesheet)
 
         # Placing Aquitard thickenss widget on screen
@@ -245,6 +245,13 @@ class Screen2(QWidget):
         checkbox_row6.addWidget(self.checkBox_t6)
         layout.addLayout(checkbox_row6)
 
+        self.checkBox_t7 = QCheckBox(self)
+        self.checkBox_t7.setText("ML Model")
+        self.checkBox_t7.setStyleSheet(label_stylesheet)
+        checkbox_row7 = QHBoxLayout() 
+        checkbox_row7.addWidget(self.checkBox_t7)
+        layout.addLayout(checkbox_row7)
+
         button_row_layout = QHBoxLayout()
 
         self.last = QPushButton(text="Previous Page")
@@ -269,6 +276,7 @@ class Screen2(QWidget):
         payload.t4 = self.checkBox_t4.isChecked()
         payload.t5 = self.checkBox_t5.isChecked()
         payload.t6 = self.checkBox_t6.isChecked()
+        payload.t7 = self.checkBox_t7.isChecked()
 
         widget.setCurrentIndex(widget.currentIndex() + 1)  
     
@@ -291,6 +299,13 @@ class Screen3(QWidget):
         self.page_3_heading.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.layoutVertical.addWidget(self.page_3_heading)
 
+        pumpingRateLayout = QHBoxLayout()
+        self.pumping_rate = QLabel("Pumping Rate")
+        self.pumping_rate.setStyleSheet(label_stylesheet)
+        pumpingRateLayout.addWidget(self.pumping_rate)
+        self.pumping_rate_input = QLineEdit(self)
+        self.pumping_rate_input.setStyleSheet(line_edit_stylesheet)
+        pumpingRateLayout.addWidget(self.pumping_rate_input)
 
         wellRadiusLayout = QHBoxLayout()
         self.well_radius = QLabel("Well Radius")
@@ -301,13 +316,6 @@ class Screen3(QWidget):
         wellRadiusLayout.addWidget(self.well_radius_input)
 
         
-        pumpingRateLayout = QHBoxLayout()
-        self.pumping_rate = QLabel("Pumping Rate")
-        self.pumping_rate.setStyleSheet(label_stylesheet)
-        pumpingRateLayout.addWidget(self.pumping_rate)
-        self.pumping_rate_input = QLineEdit(self)
-        self.pumping_rate_input.setStyleSheet(line_edit_stylesheet)
-        pumpingRateLayout.addWidget(self.pumping_rate_input)
 
         
         self.model = QStandardItemModel()
@@ -342,8 +350,8 @@ class Screen3(QWidget):
         self.pushButtonEval.clicked.connect(self.on_pushButtonnext_clicked)
         page_change_ButtonLayout.addWidget(self.pushButtonEval)
 
-        self.layoutVertical.addLayout(wellRadiusLayout)
         self.layoutVertical.addLayout(pumpingRateLayout)
+        self.layoutVertical.addLayout(wellRadiusLayout)
         self.layoutVertical.addWidget(self.tableView)
         self.layoutVertical.addLayout(csvButtonLayout)
         self.layoutVertical.addLayout(page_change_ButtonLayout)
@@ -485,21 +493,27 @@ class Screen4(QWidget):
         y=[]
         x_label = ""
         y_label = ""
-        try:
-            if(self.cb.itemText(index) == "Drawdown-Time"):
-                x,y = payload.graph1()
-                x_label = "Time"
-                y_label = "Drawdown"
-            elif(self.cb.itemText(index) == "Composite"):
-                x,y = payload.graph2()
-                x_label = "T/R²"
-                y_label = "Drawdown"
-            elif(self.cb.itemText(index) == "Drawdown-Distance"):
-                x,y = payload.graph3()
-                x_label = "Distance"
-                y_label = "Drawdown"
-        except:
-            print("Graph not found!")
+        # try:
+        if(self.cb.itemText(index) == "Drawdown-Time"):
+            x,y = payload.graph1()
+            a,b = payload.mlgraph()
+            x.append(a)
+            y.append(b)
+            x_label = "Time"
+            y_label = "Drawdown"
+        elif(self.cb.itemText(index) == "Composite"):
+            x,y = payload.graph2()
+            x_label = "T/R²"
+            y_label = "Drawdown"
+        elif(self.cb.itemText(index) == "Drawdown-Distance"):
+            x,y = payload.graph3()
+            a,b = payload.mlgraph()
+            x.append(a)
+            y.append(b)
+            x_label = "Distance"
+            y_label = "Drawdown"
+        # except:
+        #     print("Graph not found!")
         self.figure.clear()
         ax = self.figure.add_subplot(111)
         plt.title("placeholder")
@@ -522,16 +536,19 @@ class Screen4(QWidget):
             legend.append("Unconfined (Thesis, using Sy)")
         if payload.t6:
             legend.append("Unconfined (Dupuit; wellborn storage; numerical)")
+        if payload.t7:
+            legend.append("ML Model")
 
         start = 0
         if(self.cb.itemText(index) == "Drawdown-Time"):
             ax.scatter(x[0],y[0],label="Original data")
             start=1
         
-
+        print(payload.t7)
+        print(size(x))
         for i in range(start,len(x)):
             ax.plot(x[i],y[i],label=legend[i-start])
-        
+
         plt.legend()
         self.canvas.draw()
 

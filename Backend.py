@@ -1,10 +1,16 @@
 from functools import partial
 import numpy as np
 from numpy import *
+import pandas as pd
 from scipy.integrate import quad
 from scipy.integrate import odeint
 from scipy.special import *
 import sys
+import pickle
+from sklearn.linear_model import LogisticRegression
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import PolynomialFeatures
 
 class DataSet:
     
@@ -70,7 +76,51 @@ class Well:
         output_file.writelines(['Q', '\t', str(self.Q),'\n'])
         output_file.close()     
 
-        
+class MLModel:
+    def __init__(self,s,t,K,Sy,b,r,Q):
+        pkl_filename="pickle_model.pkl"
+        hydr_cond=[]
+        sp_yield=[] 
+        aq_th=[]
+        rd_dis=[]
+        rate=[]
+        drawdown=s
+        drawdown=np.array(drawdown)
+
+        for i in range(0,len(t)):
+            hydr_cond.append(K)
+            sp_yield.append(Sy)
+            aq_th.append(b)
+            rd_dis.append(r)
+            rate.append(Q)
+            
+        hydr_cond=np.array(hydr_cond)
+        sp_yield=np.array(sp_yield)
+        aq_th=np.array(aq_th)
+        rd_dis=np.array(rd_dis)
+        rate=np.array(rate)
+        t=np.array(t)
+        drawdown=np.array(drawdown)
+
+        print("Size1 :",hydr_cond.size)
+        print("Size2 :",sp_yield.size)
+        print("Size3 :",aq_th.size)
+        print("Size4 :",rd_dis.size)
+        print("Size5 :",rate.size)
+        print("Size6 :",t.size)
+        print("Size7 :",drawdown.size)
+
+        values=pd.DataFrame({'K': hydr_cond, 'Sy': sp_yield,'b':aq_th,'r':rd_dis,'Q':rate,'time':t,'drawdown':drawdown}, columns=['K', 'Sy','b','r','Q','time','drawdown'])
+        with open(pkl_filename, 'rb') as file:
+            pickle_model = pickle.load(file)
+        variables = values[['K','Sy','b','r','Q','time']].to_numpy()
+        poly = PolynomialFeatures(degree=3)
+        poly_variables = poly.fit_transform(variables)
+
+        self.spred=pickle_model.predict(poly_variables)
+    def Drawdown(self):
+        return self.spred
+
 class Hantush:            # Hantush and Jacob (1955) solution
 
     def __init__(self, aquifer, well):
