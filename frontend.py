@@ -551,9 +551,9 @@ widget.setWindowFlags(Qt.WindowType.CustomizeWindowHint | Qt.WindowType.WindowCl
 
 
 widget.addWidget(screen1)
-# widget.addWidget(screen2)
-# widget.addWidget(screen3)
-# widget.addWidget(screen4)
+widget.addWidget(screen2)
+widget.addWidget(screen3)
+widget.addWidget(screen4)
 widget.addWidget(error_screen)
 widget.show()
 app.exec()
