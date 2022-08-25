@@ -1,4 +1,10 @@
-
+heading_stylesheet = """
+    QWidget {
+        font: bold 40px;
+        padding: 20px;
+        max-height: 50px;
+    }
+"""
 label_stylesheet = """
     QWidget {
         font: 20px;
@@ -18,7 +24,6 @@ line_edit_stylesheet = """
         max-width: 200px;
         min-height:35px;
         border: 1px solid red;
-        box-shadow: 10px 10px;
     }
 """
 
