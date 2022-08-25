@@ -533,22 +533,6 @@ class Error_screen(QWidget):
        layout.addWidget(heading)
 
 
-       # error_layout = QHBoxLayout()
-       # self.error_box = QLabel(self.error)
-       # self.error_box.setAlignment(Qt.AlignmentFlag.AlignCenter)
-       # self.error_box.setStyleSheet(label_stylesheet)
-       # error_layout.addWidget(self.error_box)
-       # layout.addLayout(error_layout)
-       self.label = QLabel()
-       self.pixmap = QPixmap('./images/error.png')
-       self.label.setPixmap(self.pixmap)
-       self.label.resize(100, 100)
-       layout.addWidget(self.label)
-       self.setLayout(layout)
-
-    # def update_error(self, err):
-    #     self.error_box.setText(err);
-
 app = QApplication(sys.argv)
 error_screen = Error_screen()
 screen1 = Screen1()
