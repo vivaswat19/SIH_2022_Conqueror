@@ -1,50 +1,52 @@
 import numpy as np
-from numpy import *
-import pandas as pd
-from scipy.integrate import quad
-from scipy.integrate import odeint
-from scipy.special import *
-import sys
-import pickle
-from sklearn.linear_model import LogisticRegression
-from sklearn.linear_model import LinearRegression
-from sklearn.datasets import load_iris
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import PolynomialFeatures
-from scipy.optimize import curve_fit
 import math as m
 import matplotlib.pyplot as plt
-from scipy.stats import linregress
-
-class CooperJacob:
-    def __init__(self, filepath,q,r):
-        df = pd.read_csv(filepath)
-        self.s=df['S'].to_numpy()
-        self.t=df['T'].to_numpy()
-        self.Q=q
-        self.r=r
-    
-    def Values(self):
-        reg = linregress(self.t, self.s)
-        delta_s = reg.slope
-        # score=reg.score(self.t.reshape(-1, 1), self.s)
-        # print(score)
-        # delta_s=reg.predict([[100]])-reg.predict([[10]])
-        T=2.303*self.Q/4*np.pi*delta_s
-        S=2.25*T*reg.predict([[0]])/self.r**2
-
-        intercept = 2.3*self.Q*np.log(S)/(4*3.14*T)
-        slope = 2.3*self.Q/(4*3.14*T)
-
-        y = intercept+slope*np.log(self.t)
-        
-        return self.t,y,self.s,T,S
-
-obj = CooperJacob('./transducer.csv',27.255,0.076)
-
-obj.Values()
-
-# plt.plot(a,b)
-# plt.show()
-
-# print(d,e)
+from scipy.optimize import curve_fit
+def wufunc(r,S,T,t):
+    u = (r**2)*S/(4*T*t)
+    Wu=-0.5772-np.log(u)+u
+    ntrm = 30
+    for i in range (2, ntrm+1):
+        sign = (-1)**(i-1)
+    factval = float(m.factorial(i))
+    Wu = Wu + sign*(u**i)/(i*factval)
+    #End loop i
+    return (Wu)
+def myfunc(tt, T, S):
+    pi = 3.14
+    Q = 27.255 #m3/d
+    r = 0.076 #m
+    nrow = len(tt)
+    n = nrow
+    drawdown=np.zeros((n),float)
+    for i in range (0,n):
+        Wu_val=wufunc(r,S,T,tt[i])
+    drawdown[i] = Q*Wu_val/(4*pi*T)
+    #End loop i
+    return (drawdown)
+def main():
+    indata = np.loadtxt("transducer.csv", delimiter=",")
+    Times = np.copy(indata[:,0]) # Time from first column
+    sobs = np.copy(indata[:,1]) # Drawdown from second column
+    init_vals = [1, 0.00001] # for [T & S values]
+    best_vals, covar = curve_fit(myfunc, Times, sobs, p0=init_vals, bounds=([0.01, 0.000001], [100000, 0.1]), method = 'trf')
+    stdevs = np.sqrt(np.diag(covar))
+    plt.xscale('log')
+    plt.yscale('log')
+    print ('Best valus (T, S)')
+    print (best_vals)
+    print ('Covariance')
+    print (covar)
+    print ('standard deviation')
+    print (stdevs)
+    plt.xscale('log')
+    plt.yscale('log')
+    T = best_vals [0]
+    S = best_vals [1]
+    smodel=myfunc(Times,T,S)
+    plt.plot(Times,smodel)
+    plt.plot(Times, sobs, 'bo')
+    plt.xlabel("Time (day)")
+    plt.ylabel("Drawdown (m)")
+    plt.show()
+main()

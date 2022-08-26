@@ -155,6 +155,6 @@ class connector:
             x,y,z,s,t = cooperjacob.Values()
             x_.append(x)
             y_.append(y)
-        return x_,y_
+        return x_,y_,z,s,t
     def getValues(self):
         return self.S,self.T

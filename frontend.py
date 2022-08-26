@@ -368,9 +368,9 @@ class Screen3(QWidget):
     
     def screen_4(self):
         if(self.well_radius_input.text() != ""):
-            payload.r = self.well_radius_input.text()
+            payload.r = float(self.well_radius_input.text())
         if(self.pumping_rate_input.text() != ""):
-            payload.q = self.pumping_rate_input.text()
+            payload.q = float(self.pumping_rate_input.text())
         
         payload.setValues()
         screen4.update_data_label()
@@ -455,12 +455,13 @@ class Screen4(QWidget):
 
         self.setLayout(layout)
 
-    def update_data_label(self):
-        (s,t) = payload.getValues()
-        self.s_output.setText(str(s))
-        self.t_output.setText(str(t))
+    def update_data_label(self):         
+        a,b,c,d,e = payload.graph1()
+        self.s_output.setText(str(d))
+        self.t_output.setText(str(e))
         self.kz_kr_output.setText(str(0))
         self.b_output.setText(str(payload.b))
+        
 
     def selection_Change(self,index=0):
         x=[]
@@ -469,7 +470,7 @@ class Screen4(QWidget):
         y_label = ""
         try:
             if(self.cb.itemText(index) == "Drawdown-Time"):
-                x,y = payload.graph1()
+                x,y,z,s,t = payload.graph1()
                 # a,b = payload.mlgraph()
                 # x.append(a)
                 # y.append(b)
@@ -491,37 +492,32 @@ class Screen4(QWidget):
         self.figure.clear()
         ax = self.figure.add_subplot(111)
         plt.title("placeholder")
-        plt.xlabel(x_label)
-        plt.ylabel(y_label)
-        plt.xscale("log")
-        plt.yscale("log")
 
         legend = []
 
         if payload.t1:
-            legend.append("Confined (Thesis)")
+            plt.xlabel(x_label)
+            plt.ylabel(y_label)
+            plt.xscale("log")
+            plt.yscale("log")
+            legend.append("Theis")
+            start = 0
+            if(self.cb.itemText(index) == "Drawdown-Time"):
+                ax.scatter(x[0],y[0],label="Original data")
+                start=1
+            for i in range(start,len(x)):
+                ax.plot(x[i],y[i],label=legend[i-start])
         if payload.t2:
-            legend.append("Confined (Wellborn storage; numerical)")
-        if payload.t3:
-            legend.append("Leaky (Hantush and Jacob)")
-        if payload.t4:
-            legend.append("Leaky (Hantush, 1960; short-term; aquitard storage)")
-        if payload.t5:
-            legend.append("Unconfined (Thesis, using Sy)")
-        if payload.t6:
-            legend.append("Unconfined (Dupuit; wellborn storage; numerical)")
-        legend.append("ML Model")
-
-        start = 0
-        if(self.cb.itemText(index) == "Drawdown-Time"):
-            ax.scatter(x[0],y[0],label="Original data")
-            start=1
-        for i in range(start,len(x)):
-            print(x[i])
-            print(y[i])
-            ax.plot(x[i],y[i],label=legend[i-start])
-
-
+            plt.xlabel(x_label)
+            plt.ylabel(y_label)
+            plt.xscale("log")
+            legend.append("Jacob")
+            start = 0
+            if(self.cb.itemText(index) == "Drawdown-Time"):
+                ax.scatter(x[0],y[0],label="Original data")
+                start=1
+            for i in range(start,len(x)):
+                ax.plot(x[i],y[i],label=legend[i-start])
         plt.legend()
         self.canvas.draw()
 

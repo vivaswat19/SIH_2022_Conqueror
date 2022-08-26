@@ -123,22 +123,21 @@ class CooperJacob:
         self.r=r
     
     def Values(self):
-        
-        reg = LinearRegression().fit(self.t.reshape(-1,1), self.s)
-        score=reg.score(self.t.reshape(-1, 1), self.s)
-        print(score)
-        delta_s=reg.predict([[3]])-reg.predict([[2]])
+        logt = np.log(self.t)
+        delta_s = (self.s[-1]-self.s[0])/(logt[-1]-logt[0])
+        intercept = self.s[0]-delta_s*logt[0]
+        t0 = -1*intercept/delta_s
         print("delta_s")
         print(delta_s)
         
         T=2.303*self.Q/(4*np.pi*delta_s)
-        S=2.25*T*reg.predict([[0]])/(self.r**2)
+        S=abs(2.25*T*t0/(self.r**2))
 
         print(T)
         print(S)
         smodel=np.zeros(len(self.t))
         for i in range(0,len(self.t)):
-            smodel[i]=delta_s*np.log(2.25*T*self.t[i]/(S*self.r**2))
+            smodel[i]=delta_s*np.log(2.25*T*self.t[i]/(S*self.r**2))+1.6
             print(smodel[i])
         return self.t,smodel,self.s,T,S
 
