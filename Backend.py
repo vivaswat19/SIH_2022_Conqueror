@@ -13,7 +13,7 @@ from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import PolynomialFeatures
 from scipy.optimize import curve_fit
-
+import math as m
 class DataSet:
     
     def __init__(self,filepath):
@@ -115,29 +115,40 @@ class MLModel:
         return self.spred
 
 class CooperJacob:
-    def __init__(self, df):
+    def __init__(self, filepath,q,r):
+        df = pd.read_csv(filepath)
         self.s=df['S'].to_numpy()
         self.t=df['T'].to_numpy()
-        self.Q=27.255
-        self.r=0.076
+        self.Q=q
+        self.r=r
     
     def Values(self):
+        
         reg = LinearRegression().fit(self.t.reshape(-1,1), self.s)
         score=reg.score(self.t.reshape(-1, 1), self.s)
         print(score)
-        delta_s=reg.predict([[100]])-reg.predict([[10]])
-        T=2.303*self.Q/4*np.pi*delta_s
-        S=2.25*T*reg.predict([[0]])/self.r**2
+        delta_s=reg.predict([[3]])-reg.predict([[2]])
+        print("delta_s")
+        print(delta_s)
         
-        smodel=reg.predict(self.t.reshape(-1,1))
-        
-        return self.t,smodel,self.t,self.s,T,S
+        T=2.303*self.Q/(4*np.pi*delta_s)
+        S=2.25*T*reg.predict([[0]])/(self.r**2)
+
+        print(T)
+        print(S)
+        smodel=np.zeros(len(self.t))
+        for i in range(0,len(self.t)):
+            smodel[i]=delta_s*np.log(2.25*T*self.t[i]/(S*self.r**2))
+            print(smodel[i])
+        return self.t,smodel,self.s,T,S
 
 class Theis:
-    def __init__(self, df):
+    def __init__(self, filepath,q,r):
+        df = pd.read_csv(filepath)
         self.s=df['S'].to_numpy()
         self.t=df['T'].to_numpy()
-    
+        self.q=q
+        self.r=r
     def Values(self):
         Times = self.t
         sobs = self.s # Drawdown from second column
@@ -147,9 +158,7 @@ class Theis:
         T = best_vals[0]
         S = best_vals[1] 
         smodel=self.myfunc(Times,T,S) 
-        
-        return Times,smodel,Times,sobs,T,S
-    
+        return Times,smodel,sobs,T,S
     def wufunc(self, r,S,T,t):
         u = (r**2)*S/(4*T*t) 
         Wu=-0.5772-np.log(u)+u 
@@ -159,12 +168,10 @@ class Theis:
             factval = float(m.factorial(i))
             Wu = Wu + sign*(u**i)/(i*factval)
         return (Wu) 
-
-
     def myfunc(self, tt, T, S):
         pi = 3.14
-        Q = 1199.22 #m3/d
-        r = 251.155  #m
+        Q = self.q #m3/d
+        r = self.r  #m
         nrow = len(tt)
         n = nrow 
         drawdown=np.zeros((n),float) 

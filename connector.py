@@ -19,118 +19,142 @@ class connector:
         self.well=None
         self.data=None
         self.r = 0.076
-        self.q = -27.255
-    def getValues(self):
-        return self.aquifer.S,self.aquifer.T
+        self.q = 27.255
+        self.S = 0
+        self.T = 0
+    # def setValues(self): 
+        # output_file = open('aquifer.txt','w')
+        # output_file.writelines(['K', '\t', str(self.K),'\n'])
+        # output_file.writelines(['Ss', '\t', str(self.Ss), '\n'])
+        # output_file.writelines(['Sy', '\t', str(self.Sy), '\n'])
+        # output_file.writelines(['b', '\t', str(self.b), '\n'])
+        # output_file.writelines(['bc', '\t', str(self.bc), '\n'])        
+        # output_file.writelines(['Kc', '\t', str(self.Kc), '\n'])        
+        # output_file.writelines(['Ssc', '\t', str(self.Ssc), '\n'])
+        # output_file.close()
 
-    def setValues(self): 
-        output_file = open('aquifer.txt','w')
-        output_file.writelines(['K', '\t', str(self.K),'\n'])
-        output_file.writelines(['Ss', '\t', str(self.Ss), '\n'])
-        output_file.writelines(['Sy', '\t', str(self.Sy), '\n'])
-        output_file.writelines(['b', '\t', str(self.b), '\n'])
-        output_file.writelines(['bc', '\t', str(self.bc), '\n'])        
-        output_file.writelines(['Kc', '\t', str(self.Kc), '\n'])        
-        output_file.writelines(['Ssc', '\t', str(self.Ssc), '\n'])
-        output_file.close()
-
-        output_file = open('well.txt','w')
-        output_file.writelines(['r', '\t', str(self.r),'\n'])
-        output_file.writelines(['Q', '\t', str(self.q), '\n'])
-        output_file.close()
-
+        # output_file = open('well.txt','w')
+        # output_file.writelines(['r', '\t', str(self.r),'\n'])
+        # output_file.writelines(['Q', '\t', str(self.q), '\n'])
+        # output_file.close()
 
 
-        self.data=DataSet(self.filePath)
-        self.model = MLModel(self.data.s,self.data.t, self.K, self.Sy, self.b, self.r, self.q);
-        self.well=Well(self.data.t.min(), self.data.t.max())
-        self.data.setTr2Array(self.well.r)
-        self.aquifer=Aquifer()
 
-        # set up test objects using current parameter values
-        self.theis = Theis(self.aquifer, self.well)
-        self.hantush = Hantush(self.aquifer, self.well)
-        self.shortStor = ShortStorage(self.aquifer, self.well)    
-        self.numericWaterTable = MOL(self.aquifer, self.well)    
+        # self.data=DataSet(self.filePath)
+        # self.model = MLModel(self.data.s,self.data.t, self.K, self.Sy, self.b, self.r, self.q);
+        # self.well=Well(self.data.t.min(), self.data.t.max())
+        # self.data.setTr2Array(self.well.r)
+        # self.aquifer=Aquifer()
 
-    def mlgraph(self):
-        ans = self.model.Drawdown()
-        return self.data.t,ans
+        # # set up test objects using current parameter values
+        # self.theis = Theis(self.aquifer, self.well)
+        # self.hantush = Hantush(self.aquifer, self.well)
+        # self.shortStor = ShortStorage(self.aquifer, self.well)    
+        # self.numericWaterTable = MOL(self.aquifer, self.well)    
 
+    # def mlgraph(self):
+    #     ans = self.model.Drawdown()
+    #     return self.data.t,ans
+
+    # def graph1(self):
+    #     #drawdown-time graph
+    #     xValues=[]
+    #     yValues=[]
+    #     xValues.append(self.data.t)
+    #     yValues.append(self.data.s)
+    #     if self.t1:
+    #         xValues.append(self.well.tArray)
+    #         yValues.append(self.theis.Drawdown(0,0))
+    #     if self.t2:
+    #         xValues.append(self.well.tArray)
+    #         yValues.append(self.numericWaterTable.Drawdown(1))
+    #     if self.t3:
+    #         xValues.append(self.well.tArray)
+    #         yValues.append(self.hantush.Drawdown(0))
+    #     if self.t4:
+    #         xValues.append(self.well.tArray)
+    #         yValues.append(self.shortStor.Drawdown(0))
+    #     if self.t5:
+    #         xValues.append(self.well.tArray)
+    #         yValues.append(self.theis.Drawdown(1,0))
+    #     if self.t6:
+    #         xValues.append(self.well.tArray)
+    #         yValues.append(self.numericWaterTable.Drawdown(0))
+
+    #     return xValues,yValues
+
+    # def graph2(self):
+
+    #     #composite graph
+    #     xValues=[]
+    #     yValues=[]
+    #     if self.t1:
+    #         xValues.append(self.well.tr2Array)
+    #         yValues.append(self.theis.Drawdown(0,2))
+    #     if self.t2:
+    #         xValues.append(self.well.tr2Array)
+    #         yValues.append(self.numericWaterTable.Drawdown(1))
+    #     if self.t3:
+    #         xValues.append(self.well.tr2Array)
+    #         yValues.append(self.hantush.Drawdown(1))
+    #     if self.t4:
+    #         xValues.append(self.well.tr2Array)
+    #         yValues.append(self.shortStor.Drawdown(1))
+    #     if self.t5:
+    #         xValues.append(self.well.tr2Array)
+    #         yValues.append(self.theis.Drawdown(1,2))
+    #     if self.t6:
+    #         xValues.append(self.well.tr2Array)
+    #         yValues.append(self.numericWaterTable.Drawdown(0))
+
+    #     return xValues,yValues
+
+    # def graph3(self):
+    #     #Drawdown - Distance Graph
+    #     xValues=[]
+    #     yValues=[]
+    #     if self.t1:
+    #         xValues.append(self.well.rArray)
+    #         yValues.append(self.theis.Drawdown(0,1))
+    #     if self.t2:
+    #         xValues.append(self.well.rArray)
+    #         yValues.append(self.numericWaterTable.Drawdown(1))
+    #     if self.t3:
+    #         xValues.append(self.well.rArray)
+    #         yValues.append(self.hantush.Drawdown(2))
+    #     if self.t4:
+    #         xValues.append(self.well.rArray)
+    #         yValues.append(self.shortStor.Drawdown(2))
+    #     if self.t5:
+    #         xValues.append(self.well.rArray)
+    #         yValues.append(self.theis.Drawdown(1,1))
+    #     if self.t6:
+    #         xValues.append(self.well.rArray)
+    #         yValues.append(self.numericWaterTable.Drawdown(0))
+
+    #     return xValues,yValues
+
+    def setValues(self):
+        theis = Theis(self.filePath,self.q,self.r)
+        x,y,z,s,t = theis.Values()
+        self.S = s
+        self.T = t
+    
     def graph1(self):
-        #drawdown-time graph
-        xValues=[]
-        yValues=[]
-        xValues.append(self.data.t)
-        yValues.append(self.data.s)
+        theis = Theis(self.filePath,self.q,self.r)
+        x,y,z,s,t = theis.Values()
+        x_=[]
+        y_=[]
+        x_.append(x)
+        y_.append(z)
         if self.t1:
-            xValues.append(self.well.tArray)
-            yValues.append(self.theis.Drawdown(0,0))
+            x_.append(x)
+            y_.append(y)
         if self.t2:
-            xValues.append(self.well.tArray)
-            yValues.append(self.numericWaterTable.Drawdown(1))
-        if self.t3:
-            xValues.append(self.well.tArray)
-            yValues.append(self.hantush.Drawdown(0))
-        if self.t4:
-            xValues.append(self.well.tArray)
-            yValues.append(self.shortStor.Drawdown(0))
-        if self.t5:
-            xValues.append(self.well.tArray)
-            yValues.append(self.theis.Drawdown(1,0))
-        if self.t6:
-            xValues.append(self.well.tArray)
-            yValues.append(self.numericWaterTable.Drawdown(0))
-
-        return xValues,yValues
-
-    def graph2(self):
-
-        #composite graph
-        xValues=[]
-        yValues=[]
-        if self.t1:
-            xValues.append(self.well.tr2Array)
-            yValues.append(self.theis.Drawdown(0,2))
-        if self.t2:
-            xValues.append(self.well.tr2Array)
-            yValues.append(self.numericWaterTable.Drawdown(1))
-        if self.t3:
-            xValues.append(self.well.tr2Array)
-            yValues.append(self.hantush.Drawdown(1))
-        if self.t4:
-            xValues.append(self.well.tr2Array)
-            yValues.append(self.shortStor.Drawdown(1))
-        if self.t5:
-            xValues.append(self.well.tr2Array)
-            yValues.append(self.theis.Drawdown(1,2))
-        if self.t6:
-            xValues.append(self.well.tr2Array)
-            yValues.append(self.numericWaterTable.Drawdown(0))
-
-        return xValues,yValues
-
-    def graph3(self):
-        #Drawdown - Distance Graph
-        xValues=[]
-        yValues=[]
-        if self.t1:
-            xValues.append(self.well.rArray)
-            yValues.append(self.theis.Drawdown(0,1))
-        if self.t2:
-            xValues.append(self.well.rArray)
-            yValues.append(self.numericWaterTable.Drawdown(1))
-        if self.t3:
-            xValues.append(self.well.rArray)
-            yValues.append(self.hantush.Drawdown(2))
-        if self.t4:
-            xValues.append(self.well.rArray)
-            yValues.append(self.shortStor.Drawdown(2))
-        if self.t5:
-            xValues.append(self.well.rArray)
-            yValues.append(self.theis.Drawdown(1,1))
-        if self.t6:
-            xValues.append(self.well.rArray)
-            yValues.append(self.numericWaterTable.Drawdown(0))
-
-        return xValues,yValues
+            cooperjacob = CooperJacob(self.filePath,self.q,self.r)
+            x,y,z,s,t = cooperjacob.Values()
+            x_.append(x)
+            y_.append(y)
+        return x_,y_
+    def getValues(self):
+        return self.S,self.T

@@ -190,7 +190,7 @@ class Screen2(QWidget):
 
 
         self.checkBox_t1 = QCheckBox(self)
-        self.checkBox_t1.setText("Confined (Thesis)")
+        self.checkBox_t1.setText("Theis")
         self.checkBox_t1.setStyleSheet(label_stylesheet)
 
         
@@ -199,39 +199,39 @@ class Screen2(QWidget):
         layout.addLayout(checkbox_row1)
         
         self.checkBox_t2 = QCheckBox(self)
-        self.checkBox_t2.setText("Confined (Wellborn storage; numerical)")
+        self.checkBox_t2.setText("jacob")
         self.checkBox_t2.setStyleSheet(label_stylesheet)
         checkbox_row2 = QHBoxLayout() 
         checkbox_row2.addWidget(self.checkBox_t2)
         layout.addLayout(checkbox_row2)
         
-        self.checkBox_t3 = QCheckBox(self)
-        self.checkBox_t3.setText("Leaky (Hantush and Jacob)")
-        self.checkBox_t3.setStyleSheet(label_stylesheet)
-        checkbox_row3 = QHBoxLayout() 
-        checkbox_row3.addWidget(self.checkBox_t3)
-        layout.addLayout(checkbox_row3)
+        # self.checkBox_t3 = QCheckBox(self)
+        # self.checkBox_t3.setText("Leaky (Hantush and Jacob)")
+        # self.checkBox_t3.setStyleSheet(label_stylesheet)
+        # checkbox_row3 = QHBoxLayout() 
+        # checkbox_row3.addWidget(self.checkBox_t3)
+        # layout.addLayout(checkbox_row3)
         
-        self.checkBox_t4 = QCheckBox(self)
-        self.checkBox_t4.setText("Leaky (Hantush, 1960; short-term; aquitard storage)")
-        self.checkBox_t4.setStyleSheet(label_stylesheet)
-        checkbox_row4 = QHBoxLayout() 
-        checkbox_row4.addWidget(self.checkBox_t4)
-        layout.addLayout(checkbox_row4)
+        # self.checkBox_t4 = QCheckBox(self)
+        # self.checkBox_t4.setText("Leaky (Hantush, 1960; short-term; aquitard storage)")
+        # self.checkBox_t4.setStyleSheet(label_stylesheet)
+        # checkbox_row4 = QHBoxLayout() 
+        # checkbox_row4.addWidget(self.checkBox_t4)
+        # layout.addLayout(checkbox_row4)
         
-        self.checkBox_t5 = QCheckBox(self)
-        self.checkBox_t5.setText("Unconfined (Thesis, using Sy)")
-        self.checkBox_t5.setStyleSheet(label_stylesheet)
-        checkbox_row5 = QHBoxLayout() 
-        checkbox_row5.addWidget(self.checkBox_t5)
-        layout.addLayout(checkbox_row5)
+        # self.checkBox_t5 = QCheckBox(self)
+        # self.checkBox_t5.setText("Unconfined (Thesis, using Sy)")
+        # self.checkBox_t5.setStyleSheet(label_stylesheet)
+        # checkbox_row5 = QHBoxLayout() 
+        # checkbox_row5.addWidget(self.checkBox_t5)
+        # layout.addLayout(checkbox_row5)
         
-        self.checkBox_t6 = QCheckBox(self)
-        self.checkBox_t6.setText("Unconfined (Dupuit; wellborn storage; numerical)")
-        self.checkBox_t6.setStyleSheet(label_stylesheet)
-        checkbox_row6 = QHBoxLayout() 
-        checkbox_row6.addWidget(self.checkBox_t6)
-        layout.addLayout(checkbox_row6)
+        # self.checkBox_t6 = QCheckBox(self)
+        # self.checkBox_t6.setText("Unconfined (Dupuit; wellborn storage; numerical)")
+        # self.checkBox_t6.setStyleSheet(label_stylesheet)
+        # checkbox_row6 = QHBoxLayout() 
+        # checkbox_row6.addWidget(self.checkBox_t6)
+        # layout.addLayout(checkbox_row6)
 
         button_row_layout = QHBoxLayout()
 
@@ -253,10 +253,10 @@ class Screen2(QWidget):
     def screen_3(self):
         payload.t1 = self.checkBox_t1.isChecked()
         payload.t2 = self.checkBox_t2.isChecked()
-        payload.t3 = self.checkBox_t3.isChecked()
-        payload.t4 = self.checkBox_t4.isChecked()
-        payload.t5 = self.checkBox_t5.isChecked()
-        payload.t6 = self.checkBox_t6.isChecked()
+        # payload.t3 = self.checkBox_t3.isChecked()
+        # payload.t4 = self.checkBox_t4.isChecked()
+        # payload.t5 = self.checkBox_t5.isChecked()
+        # payload.t6 = self.checkBox_t6.isChecked()
 
         widget.setCurrentIndex(widget.currentIndex() + 1)  
     
@@ -470,9 +470,9 @@ class Screen4(QWidget):
         try:
             if(self.cb.itemText(index) == "Drawdown-Time"):
                 x,y = payload.graph1()
-                a,b = payload.mlgraph()
-                x.append(a)
-                y.append(b)
+                # a,b = payload.mlgraph()
+                # x.append(a)
+                # y.append(b)
                 x_label = "Time"
                 y_label = "Drawdown"
             elif(self.cb.itemText(index) == "Composite"):
@@ -517,7 +517,10 @@ class Screen4(QWidget):
             ax.scatter(x[0],y[0],label="Original data")
             start=1
         for i in range(start,len(x)):
+            print(x[i])
+            print(y[i])
             ax.plot(x[i],y[i],label=legend[i-start])
+
 
         plt.legend()
         self.canvas.draw()
@@ -550,7 +553,6 @@ widget.setFixedSize(900,600)
 widget.setWindowFlags(Qt.WindowType.CustomizeWindowHint | Qt.WindowType.WindowCloseButtonHint | Qt.WindowType.WindowMinimizeButtonHint)
 
 
-widget.addWidget(screen1)
 widget.addWidget(screen2)
 widget.addWidget(screen3)
 widget.addWidget(screen4)
