@@ -457,8 +457,8 @@ class Screen4(QWidget):
 
     def update_data_label(self):         
         a,b,c,d,e = payload.graph1()
-        self.s_output.setText(str(d))
-        self.t_output.setText(str(e))
+        self.s_output.setText(str(e))
+        self.t_output.setText(str(d))
         self.kz_kr_output.setText(str(0))
         self.b_output.setText(str(payload.b))
         

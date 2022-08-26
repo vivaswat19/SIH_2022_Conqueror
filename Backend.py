@@ -119,27 +119,38 @@ class CooperJacob:
         df = pd.read_csv(filepath)
         self.s=df['S'].to_numpy()
         self.t=df['T'].to_numpy()
-        self.Q=q
+        self.q=q
         self.r=r
-    
     def Values(self):
-        logt = np.log(self.t)
-        delta_s = (self.s[-1]-self.s[0])/(logt[-1]-logt[0])
-        intercept = self.s[0]-delta_s*logt[0]
-        t0 = -1*intercept/delta_s
-        print("delta_s")
-        print(delta_s)
-        
-        T=2.303*self.Q/(4*np.pi*delta_s)
-        S=abs(2.25*T*t0/(self.r**2))
-
-        print(T)
-        print(S)
-        smodel=np.zeros(len(self.t))
-        for i in range(0,len(self.t)):
-            smodel[i]=delta_s*np.log(2.25*T*self.t[i]/(S*self.r**2))+1.6
-            print(smodel[i])
-        return self.t,smodel,self.s,T,S
+        Times = self.t
+        sobs = self.s # Drawdown from second column
+        init_vals = [1, 0.00001] # for [T & S values]
+        best_vals, covar = curve_fit(self.myfunc, Times, sobs, p0=init_vals, method = 'trf')
+        stdevs = np.sqrt(np.diag(covar)) 
+        T = best_vals[0]
+        S = best_vals[1] 
+        smodel=self.myfunc(Times,T,S) 
+        return Times,smodel,sobs,T,S
+    def wufunc(self, r,S,T,t):
+        u = (r**2)*S/(4*T*t) 
+        Wu=-0.5772-np.log(u)+u 
+        ntrm = 30
+        for i in range (2, ntrm+1):
+            sign = (-1)**(i-1)
+            factval = float(m.factorial(i))
+            Wu = Wu + sign*(u**i)/(i*factval)
+        return (Wu) 
+    def myfunc(self, tt, T, S):
+        pi = 3.14
+        Q = self.q #m3/d
+        r = self.r  #m
+        nrow = len(tt)
+        n = nrow 
+        drawdown=np.zeros((n),float) 
+        for i in range (0,n):
+            Wu_val=2.3*np.log()
+            drawdown[i] = Q*Wu_val/(4*pi*T) #End loop i
+        return (drawdown)
 
 class Theis:
     def __init__(self, filepath,q,r):
@@ -152,7 +163,7 @@ class Theis:
         Times = self.t
         sobs = self.s # Drawdown from second column
         init_vals = [1, 0.00001] # for [T & S values]
-        best_vals, covar = curve_fit(self.myfunc, Times, sobs, p0=init_vals, bounds=([0.01, 0.000001], [100000, 0.1]), method = 'trf')
+        best_vals, covar = curve_fit(self.myfunc, Times, sobs, p0=init_vals, method = 'trf')
         stdevs = np.sqrt(np.diag(covar)) 
         T = best_vals[0]
         S = best_vals[1] 
